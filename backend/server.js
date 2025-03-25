@@ -17,7 +17,11 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['https://marc-os.com', 'http://localhost:3000'],
+  origin: [
+    'https://marc-os.com',
+    'https://blog.marc-os.com',
+    'http://localhost:3000'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true

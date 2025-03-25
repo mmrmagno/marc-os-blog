@@ -4,7 +4,7 @@ services:
     container_name: marc-os-frontend-cursor
     restart: unless-stopped
     environment:
-      - REACT_APP_API_URL=https://api.marc-os.com
+      - REACT_APP_API_URL=https://api.blog.marc-os.com
       - PORT=3000
     volumes:
       - ./frontend:/app
