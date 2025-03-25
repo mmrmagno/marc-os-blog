@@ -1,0 +1,48 @@
+services:
+  frontend:
+    build: ./frontend
+    container_name: marc-os-frontend-cursor
+    restart: unless-stopped
+    environment:
+      - REACT_APP_API_URL=https://api.blog.marc-os.com
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - proxy
+      - internal
+
+  backend:
+    build: ./backend
+    container_name: marc-os-backend-cursor
+    restart: unless-stopped
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/marc-os
+      - PORT=5000
+      - JWT_SECRET=local_development_secret
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin123
+    depends_on:
+      - mongodb
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - proxy
+      - internal
+
+  mongodb:
+    image: mongo:latest
+    container_name: marc-os-mongodb-cursor
+    restart: unless-stopped
+    volumes:
+      - ./mongodb/data:/data/db
+    networks:
+      - internal
+
+networks:
+  proxy:
+    external: true
+    name: proxy  # This should match your NPM network name
+  internal:
+    driver: bridge
