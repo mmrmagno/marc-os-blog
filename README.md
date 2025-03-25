@@ -137,8 +137,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Author
 
 **Marc**
-- Website: [marc-os.com](https://marc-os.com)
-- Github: [@yourusername](https://github.com/yourusername)
+- Website: [marc-os.com](https://blog.marc-os.com)
+- Github: [@mmrmagno](https://github.com/yourusername)
 
 ## 🙏 Acknowledgments
 
