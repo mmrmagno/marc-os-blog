@@ -24,8 +24,8 @@ A modern, full-stack blog platform built with React, Node.js, and MongoDB, featu
 
 ```
 marc-os-blog/
-├── frontend/          # React frontend application
-├── backend/           # Node.js/Express backend API
+├── frontend/          # React frontend application (Port 3023)
+├── backend/           # Node.js/Express backend API (Port 5023)
 ├── mongodb/           # MongoDB data persistence
 └── docker-compose.yml # Container orchestration
 ```
@@ -72,13 +72,13 @@ Configure the following proxy hosts in Nginx Proxy Manager:
 
 1. Blog Frontend:
    - Domain: `blog.marc-os.com`
-   - Forward to: `marc-os-frontend-cursor:3000`
+   - Forward to: `marc-os-frontend-cursor:3023`
    - Enable SSL
    - Enable WebSocket Support
 
 2. Backend API:
    - Domain: `api.blog.marc-os.com`
-   - Forward to: `marc-os-backend-cursor:5000`
+   - Forward to: `marc-os-backend-cursor:5023`
    - Enable SSL
 
 ## 💻 Development
@@ -88,7 +88,7 @@ Configure the following proxy hosts in Nginx Proxy Manager:
 ```bash
 cd frontend
 npm install
-npm start
+PORT=3023 npm start
 ```
 
 ### Backend Development
@@ -96,7 +96,7 @@ npm start
 ```bash
 cd backend
 npm install
-npm run dev
+PORT=5023 npm run dev
 ```
 
 ## 🔒 Security
