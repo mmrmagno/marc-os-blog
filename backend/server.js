@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS configuration
+<<<<<<< HEAD
 const allowedOrigins = ['https://marc-os.com', 'https://www.marc-os.com', 'http://localhost:3000'];
 app.use(cors({
   origin: function(origin, callback) {
@@ -23,6 +24,14 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
+=======
+const corsOptions = {
+  origin: [
+    'https://marc-os.com',
+    'https://blog.marc-os.com',
+    'http://localhost:3000'
+  ],
+>>>>>>> parent of 646f469 (small fix testing vpn)
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -56,6 +65,7 @@ const storage = multer.diskStorage({
   }
 });
 
+<<<<<<< HEAD
 const upload = multer({
   storage: storage,
   limits: {
@@ -87,6 +97,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
+=======
+>>>>>>> parent of 646f469 (small fix testing vpn)
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
