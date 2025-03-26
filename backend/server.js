@@ -1,82 +1,98 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const morgan = require('morgan');
-const dotenv = require('dotenv');
 const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+require('dotenv').config();
 
-// Load environment variables
-dotenv.config();
-
-// Import routes
-const authRoutes = require('./routes/auth');
-const postRoutes = require('./routes/posts');
-
-// Initialize Express app
 const app = express();
 
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // CORS configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      'https://marc-os.com',
-      'http://localhost:3000'
-    ];
-    
-    // Log the origin for debugging
-    console.log('Request origin:', origin);
-    
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
+const allowedOrigins = ['https://marc-os.com', 'https://www.marc-os.com', 'http://localhost:3000'];
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      console.log('Origin not allowed:', origin);
+      console.log('Rejected origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
+}));
+
+// IP-based access control middleware
+const ALLOWED_IPS = ['167.235.21.86']; // Add your VPN IP here
+const ipAccessControl = (req, res, next) => {
+  const clientIP = req.ip || req.connection.remoteAddress;
+  console.log('Client IP:', clientIP);
+  
+  if (ALLOWED_IPS.includes(clientIP)) {
+    next();
+  } else {
+    console.log('Access denied for IP:', clientIP);
+    res.status(403).json({ message: 'Access denied. IP not allowed.' });
+  }
 };
 
-// Middleware
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use(morgan('dev'));
+// File upload configuration
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    const uploadDir = 'uploads';
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
 
-// Add request logging middleware
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  console.log('Headers:', req.headers);
-  next();
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: function(req, file, cb) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only JPEG, PNG and GIF are allowed.'));
+    }
+  }
+});
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/posts', require('./routes/posts'));
+
+// Protected routes
+app.use('/api/dashboard', ipAccessControl, require('./routes/dashboard'));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something went wrong!' });
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => {
-  console.error('MongoDB connection error:', err);
-  // Continue even if MongoDB fails (for demo purposes)
-  console.log('Continuing without MongoDB for demo purposes');
-});
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-// API routes
-app.use('/api/auth', authRoutes);
-app.use('/api/posts', postRoutes);
-
-// Health check route
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
-
-// Set port and start server
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
