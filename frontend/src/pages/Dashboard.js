@@ -4,12 +4,14 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import ImageUpload from '../components/ImageUpload';
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [excerpt, setExcerpt] = useState('');
+  const [images, setImages] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -77,7 +79,8 @@ const Dashboard = () => {
         {
           title,
           content,
-          excerpt
+          excerpt,
+          images
         },
         {
           headers: {
@@ -94,6 +97,7 @@ const Dashboard = () => {
       setTitle('');
       setContent('');
       setExcerpt('');
+      setImages([]);
       fetchPosts();
     } catch (err) {
       console.error('Error saving post:', err);

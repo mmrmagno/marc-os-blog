@@ -1,0 +1,210 @@
+.blocked {
+  min-height: 100vh;
+  background-color: var(--ctp-base);
+  color: var(--ctp-text);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.blocked-sign {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin-bottom: 2rem;
+  animation: float 6s ease-in-out infinite;
+}
+
+.octagon {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--ctp-red);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(243, 139, 168, 0.4);
+}
+
+.octagon-border {
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  background-color: var(--ctp-crust);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  z-index: -1;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.block-text {
+  color: var(--ctp-base);
+  font-size: 5rem;
+  font-weight: 800;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(17, 17, 27, 0.3);
+}
+
+.message {
+  text-align: center;
+  max-width: 600px;
+}
+
+.message h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--ctp-mauve);
+  text-shadow: 0 0 10px rgba(203, 166, 247, 0.3);
+}
+
+.message p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  color: var(--ctp-subtext1);
+  line-height: 1.6;
+}
+
+.back-button {
+  background-color: var(--ctp-mauve);
+  color: var(--ctp-crust);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.back-button:hover {
+  background-color: var(--ctp-pink);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(245, 194, 231, 0.4);
+}
+
+.background-elements {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+}
+
+.circle-1 {
+  width: 400px;
+  height: 400px;
+  background-color: var(--ctp-blue);
+  top: -100px;
+  left: -100px;
+  animation: movingBubble 25s linear infinite;
+}
+
+.circle-2 {
+  width: 300px;
+  height: 300px;
+  background-color: var(--ctp-mauve);
+  bottom: -50px;
+  right: -50px;
+  animation: movingBubble 20s linear infinite reverse;
+}
+
+.circle-3 {
+  width: 200px;
+  height: 200px;
+  background-color: var(--ctp-teal);
+  bottom: 20%;
+  left: 10%;
+  animation: movingBubble 15s linear infinite;
+}
+
+.circle-4 {
+  width: 150px;
+  height: 150px;
+  background-color: var(--ctp-peach);
+  top: 30%;
+  right: 15%;
+  animation: movingBubble 18s linear infinite reverse;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
+@keyframes movingBubble {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(50px, 100px) scale(1.05);
+  }
+  66% {
+    transform: translate(-80px, 50px) scale(0.95);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .blocked-sign {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .block-text {
+    font-size: 3.5rem;
+  }
+  
+  .message h1 {
+    font-size: 2rem;
+  }
+  
+  .message p {
+    font-size: 1.1rem;
+  }
+} 

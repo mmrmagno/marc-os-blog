@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Logo from './Logo';
 import '../styles/Navbar.css';
 
 const Navbar = ({ isAuthenticated, logOut }) => {
@@ -17,9 +18,11 @@ const Navbar = ({ isAuthenticated, logOut }) => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-          Marc-OS
-        </Link>
+        <div className="navbar-brand">
+          <Link to="/" className="logo-link" onClick={closeMobileMenu}>
+            <Logo width={40} height={40} />
+          </Link>
+        </div>
 
         <div className="menu-icon" onClick={toggleMobileMenu}>
           <div className={isMobileMenuOpen ? 'hamburger open' : 'hamburger'}>
