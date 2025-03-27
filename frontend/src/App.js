@@ -6,23 +6,45 @@ import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import NotFound from './pages/NotFound';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './styles/App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
     }
+
+    // Check if user is accessing from authorized IP
+    const checkAuthorization = async () => {
+      try {
+        const response = await fetch('/auth/check-ip');
+        setIsAuthorized(response.ok);
+      } catch (error) {
+        setIsAuthorized(false);
+      }
+    };
+
+    checkAuthorization();
   }, []);
 
   const logOut = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
+  };
+
+  // Protected route wrapper component
+  const ProtectedRoute = ({ children }) => {
+    if (!isAuthorized) {
+      return <Navigate to="/" replace />;
+    }
+    return children;
   };
 
   return (
@@ -38,19 +60,26 @@ function App() {
             <Route 
               path="/login" 
               element={
-                isAuthenticated ? 
-                <Navigate to="/dashboard" /> : 
-                <Login setIsAuthenticated={setIsAuthenticated} />
+                <ProtectedRoute>
+                  {isAuthenticated ? 
+                    <Navigate to="/dashboard" /> : 
+                    <Login setIsAuthenticated={setIsAuthenticated} />
+                  }
+                </ProtectedRoute>
               } 
             />
             <Route 
               path="/dashboard" 
               element={
-                isAuthenticated ? 
-                <Dashboard /> : 
-                <Navigate to="/login" />
+                <ProtectedRoute>
+                  {isAuthenticated ? 
+                    <Dashboard /> : 
+                    <Navigate to="/login" />
+                  }
+                </ProtectedRoute>
               } 
             />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />

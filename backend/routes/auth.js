@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const User = require('../models/User');
 
 // @route   POST /api/auth/login
 // @desc    Login user and get token
@@ -42,6 +43,20 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.error('Login error:', err.message);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// @route   GET /api/auth/check-ip
+// @desc    Check if request is from authorized IP
+// @access  Public
+router.get('/check-ip', (req, res) => {
+  const clientIP = req.ip || req.connection.remoteAddress;
+  const authorizedIP = process.env.MANAGEMENT_HOST || '167.235.21.86';
+  
+  if (clientIP === authorizedIP) {
+    res.status(200).json({ authorized: true });
+  } else {
+    res.status(403).json({ authorized: false });
   }
 });
 

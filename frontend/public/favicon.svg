@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="32" height="32" rx="6" fill="#1e1e2e"/>
+  
+  <!-- Matrix digital rain in background -->
+  <g opacity="0.4">
+    <!-- Binary digits scattered across the background -->
+    <text x="3" y="7" font-family="monospace" font-size="3" fill="#a6e3a1">1</text>
+    <text x="3" y="12" font-family="monospace" font-size="3" fill="#94e2d5">0</text>
+    <text x="3" y="17" font-family="monospace" font-size="3" fill="#89dceb">1</text>
+    <text x="3" y="22" font-family="monospace" font-size="3" fill="#74c7ec">0</text>
+    <text x="3" y="27" font-family="monospace" font-size="3" fill="#89b4fa">1</text>
+    
+    <text x="7" y="5" font-family="monospace" font-size="3" fill="#a6e3a1">0</text>
+    <text x="7" y="10" font-family="monospace" font-size="3" fill="#94e2d5">1</text>
+    <text x="7" y="15" font-family="monospace" font-size="3" fill="#89dceb">0</text>
+    <text x="7" y="20" font-family="monospace" font-size="3" fill="#74c7ec">1</text>
+    <text x="7" y="25" font-family="monospace" font-size="3" fill="#89b4fa">0</text>
+    <text x="7" y="30" font-family="monospace" font-size="3" fill="#b4befe">1</text>
+    
+    <text x="28" y="7" font-family="monospace" font-size="3" fill="#a6e3a1">1</text>
+    <text x="28" y="12" font-family="monospace" font-size="3" fill="#94e2d5">0</text>
+    <text x="28" y="17" font-family="monospace" font-size="3" fill="#89dceb">1</text>
+    <text x="28" y="22" font-family="monospace" font-size="3" fill="#74c7ec">0</text>
+    <text x="28" y="27" font-family="monospace" font-size="3" fill="#89b4fa">1</text>
+    
+    <text x="24" y="5" font-family="monospace" font-size="3" fill="#a6e3a1">0</text>
+    <text x="24" y="10" font-family="monospace" font-size="3" fill="#94e2d5">1</text>
+    <text x="24" y="15" font-family="monospace" font-size="3" fill="#89dceb">0</text>
+    <text x="24" y="20" font-family="monospace" font-size="3" fill="#74c7ec">1</text>
+    <text x="24" y="25" font-family="monospace" font-size="3" fill="#89b4fa">0</text>
+    <text x="24" y="30" font-family="monospace" font-size="3" fill="#b4befe">1</text>
+    
+    <text x="14" y="6" font-family="monospace" font-size="3" fill="#a6e3a1">1</text>
+    <text x="14" y="29" font-family="monospace" font-size="3" fill="#89b4fa">0</text>
+    
+    <text x="19" y="5" font-family="monospace" font-size="3" fill="#a6e3a1">0</text>
+    <text x="19" y="30" font-family="monospace" font-size="3" fill="#b4befe">1</text>
+  </g>
+  
+  <!-- Purple M -->
+  <path d="M8 8L11 8L16 18L21 8L24 8L24 24L20 24L20 14L16 23L12 14L12 24L8 24Z" fill="#cba6f7"/>
+</svg> 
