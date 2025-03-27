@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import '../styles/Footer.css';
 
 const Footer = () => {
+  const handleAdminClick = (e) => {
+    e.preventDefault();
+    // Force a server request by directly changing window.location
+    window.location.href = '/login';
+  };
+
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -26,8 +32,8 @@ const Footer = () => {
           <div className="footer-contact">
             <h3>Connect</h3>
             <ul>
-              <li><a href="https://github.com/marcosmagno" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-              <li><a href="https://linkedin.com/in/marcosmagno" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+              <li><a href="https://github.com/mmrmagno" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+              <li><a href="https://www.linkedin.com/in/marcos-magno-biriba-ribeiro-1ab200243/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
               <li><a href="mailto:contact@marc-os.com">Email</a></li>
             </ul>
           </div>
@@ -35,7 +41,7 @@ const Footer = () => {
         
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} Marc-OS. All rights reserved.</p>
-          <Link to="/login" className="admin-link">Admin</Link>
+          <a href="/login" onClick={handleAdminClick} className="admin-link">Admin</a>
         </div>
       </div>
     </footer>
