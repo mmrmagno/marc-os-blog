@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Blog from './pages/Blog';
@@ -11,40 +11,52 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './styles/App.css';
 
+// Protected Route wrapper component
+const ProtectedRoute = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      try {
+        // Try to access the current path
+        const response = await fetch(location.pathname);
+        if (response.status === 403) {
+          // Force a full page reload to show the block page
+          window.location.href = location.pathname;
+          return;
+        }
+        setIsChecking(false);
+      } catch (error) {
+        // If there's an error, assume it's blocked
+        window.location.href = location.pathname;
+      }
+    };
+
+    checkAccess();
+  }, [location.pathname]);
+
+  if (isChecking) {
+    return null; // or a loading spinner
+  }
+
+  return children;
+};
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(false);
   
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
     }
-
-    // Check if user is accessing from authorized IP
-    const checkAuthorization = async () => {
-      try {
-        const response = await fetch('/auth/check-ip');
-        setIsAuthorized(response.ok);
-      } catch (error) {
-        setIsAuthorized(false);
-      }
-    };
-
-    checkAuthorization();
   }, []);
 
   const logOut = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
-  };
-
-  // Protected route wrapper component
-  const ProtectedRoute = ({ children }) => {
-    if (!isAuthorized) {
-      return <Navigate to="/" replace />;
-    }
-    return children;
   };
 
   return (
