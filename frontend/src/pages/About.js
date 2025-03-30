@@ -11,17 +11,17 @@ const About = () => {
     {
       name: 'RustGuard',
       description: 'A command-line VPN client built in Rust, emphasizing performance and security. RustGuard offers robust encryption and fast connectivity, ensuring secure remote access.',
-      github: 'https://github.com/marcosmagno/rustguard'
+      github: 'https://github.com/mmrmagno/rustguard'
     },
     {
       name: 'Quick-CLI',
       description: 'A Rust-powered CLI tool that streamlines the management of QuickEMU virtual machines, reducing routine overhead and simplifying system maintenance.',
-      github: 'https://github.com/marcosmagno/quick-cli'
+      github: 'https://github.com/mmrmagno/quick-cli'
     },
     {
       name: 'McNator',
       description: 'A Python-based Discord bot that logs Minecraft server activity directly to Discord.',
-      github: null
+      github: 'https://github.com/mmrmagno/mcnator'
     }
   ];
 
@@ -36,7 +36,7 @@ const About = () => {
           
           <p>Over the years, I've navigated challenges that have significantly shaped who I am today. In 2018, I moved from Brazil to Budapest, Hungary, arriving with little knowledge of Hungarian and only basic English. Through relentless effort, I transformed my language skills, and now I speak English fluently—with a touch of Hungarian. Then, in 2020, I embraced yet another challenge by moving to Switzerland. Here, I'm diligently working to master German, a language essential for both my professional growth and everyday life.</p>
           
-          <p>My journey into technology began with my apprenticeship on August 2nd. Inspired by my dad's career, I delved into software development, deepening my understanding of computer hardware, network systems, and innovative solutions. This passion led me to develop several projects:</p>
+          <p>My journey into technology began with my apprenticeship on August 2nd 2021. Inspired by my dad's career, I delved into software development, deepening my understanding of computer hardware, network systems, and innovative solutions. This passion led me to develop several projects:</p>
         </div>
       </section>
 
