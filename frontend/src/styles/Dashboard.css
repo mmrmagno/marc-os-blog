@@ -111,9 +111,14 @@ textarea:focus {
   outline: none;
 }
 
-.save-button {
-  background-color: var(--ctp-green);
-  color: var(--ctp-base);
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.save-button, .cancel-button {
+  flex: 1;
   padding: 0.875rem;
   border: none;
   border-radius: 0.5rem;
@@ -121,7 +126,11 @@ textarea:focus {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 100%;
+}
+
+.save-button {
+  background-color: var(--ctp-green);
+  color: var(--ctp-base);
 }
 
 .save-button:hover:not(:disabled) {
@@ -132,6 +141,16 @@ textarea:focus {
 .save-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+.cancel-button {
+  background-color: var(--ctp-surface0);
+  color: var(--ctp-text);
+}
+
+.cancel-button:hover {
+  background-color: var(--ctp-surface1);
+  transform: translateY(-2px);
 }
 
 /* Preview Section */
@@ -188,10 +207,23 @@ textarea:focus {
   margin-bottom: 0.5rem !important;
 }
 
-.markdown-preview pre {
-  margin: 1.5rem 0 !important;
-  border-radius: 0.5rem !important;
-  background-color: var(--ctp-crust) !important;
+/* Fix checkbox styling */
+.markdown-preview input[type="checkbox"] {
+  margin-right: 0.5rem !important;
+  vertical-align: middle !important;
+  position: relative !important;
+  top: -1px !important;
+}
+
+.markdown-preview li {
+  display: flex !important;
+  align-items: flex-start !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.markdown-preview li > p {
+  margin: 0 !important;
+  flex: 1 !important;
 }
 
 /* Manage Posts Section */

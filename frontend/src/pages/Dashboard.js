@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
   const [activeTab, setActiveTab] = useState('editor');
+  const [editingPost, setEditingPost] = useState(null);
 
   useEffect(() => {
     fetchPosts();
@@ -72,33 +73,53 @@ const Dashboard = () => {
     setMessage({ text: '', type: '' });
     
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/posts`,
-        {
-          title,
-          content,
-          excerpt
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
+      if (editingPost) {
+        // Update existing post
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/api/posts/${editingPost._id}`,
+          {
+            title,
+            content,
+            excerpt
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
           }
-        }
-      );
+        );
+      } else {
+        // Create new post
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/posts`,
+          {
+            title,
+            content,
+            excerpt
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        );
+      }
       
       setMessage({
-        text: 'Post saved successfully!',
+        text: `Post ${editingPost ? 'updated' : 'saved'} successfully!`,
         type: 'success'
       });
       
+      // Reset form
       setTitle('');
       setContent('');
       setExcerpt('');
+      setEditingPost(null);
       fetchPosts();
     } catch (err) {
       console.error('Error saving post:', err);
       setMessage({
-        text: 'Failed to save post. Please try again.',
+        text: `Failed to ${editingPost ? 'update' : 'save'} post. Please try again.`,
         type: 'error'
       });
       
@@ -106,7 +127,7 @@ const Dashboard = () => {
       if (process.env.NODE_ENV === 'development') {
         setTimeout(() => {
           setMessage({
-            text: 'Post saved successfully! (Demo Mode)',
+            text: `Post ${editingPost ? 'updated' : 'saved'} successfully! (Demo Mode)`,
             type: 'success'
           });
           fetchPosts();
@@ -114,6 +135,31 @@ const Dashboard = () => {
       }
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleEditPost = async (post) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/posts/${post._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+      
+      setEditingPost(response.data);
+      setTitle(response.data.title);
+      setContent(response.data.content);
+      setExcerpt(response.data.excerpt);
+      setActiveTab('editor');
+    } catch (err) {
+      console.error('Error fetching post for edit:', err);
+      setMessage({
+        text: 'Failed to load post for editing. Please try again.',
+        type: 'error'
+      });
     }
   };
 
@@ -174,9 +220,17 @@ const Dashboard = () => {
       <div className="dashboard-tabs">
         <button 
           className={`tab-button ${activeTab === 'editor' ? 'active' : ''}`}
-          onClick={() => setActiveTab('editor')}
+          onClick={() => {
+            setActiveTab('editor');
+            // Reset form when switching to editor tab
+            if (!editingPost) {
+              setTitle('');
+              setContent('');
+              setExcerpt('');
+            }
+          }}
         >
-          Editor
+          {editingPost ? 'Edit Post' : 'New Post'}
         </button>
         <button 
           className={`tab-button ${activeTab === 'posts' ? 'active' : ''}`}
@@ -225,9 +279,25 @@ const Dashboard = () => {
               />
             </div>
             
-            <button type="submit" className="save-button" disabled={saving}>
-              {saving ? 'Saving...' : 'Save Post'}
-            </button>
+            <div className="form-actions">
+              <button type="submit" className="save-button" disabled={saving}>
+                {saving ? 'Saving...' : editingPost ? 'Update Post' : 'Save Post'}
+              </button>
+              {editingPost && (
+                <button
+                  type="button"
+                  className="cancel-button"
+                  onClick={() => {
+                    setEditingPost(null);
+                    setTitle('');
+                    setContent('');
+                    setExcerpt('');
+                  }}
+                >
+                  Cancel Edit
+                </button>
+              )}
+            </div>
           </form>
           
           {content && (
@@ -282,13 +352,7 @@ const Dashboard = () => {
                   <div className="post-actions">
                     <button 
                       className="edit-button"
-                      onClick={() => {
-                        // In a real application, this would load the post into the editor
-                        setActiveTab('editor');
-                        setTitle(post.title);
-                        setExcerpt(post.excerpt || '');
-                        // We would fetch the full post content here
-                      }}
+                      onClick={() => handleEditPost(post)}
                     >
                       Edit
                     </button>
