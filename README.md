@@ -27,48 +27,10 @@ A modern, full-stack blog platform built with React, Node.js, and MongoDB, featu
 
 ### 🐳 Docker Deployment
 
-1. Create the proxy network:
-   ```bash
-   docker network create proxy
-   ```
-
 2. Build and start the containers:
    ```bash
    docker compose up --build -d
    ```
-
-### 🔧 NPM Configuration
-
-Configure the following proxy hosts in Nginx Proxy Manager:
-
-1. Blog Frontend:
-   - Domain: `blog.marc-os.com`
-   - Forward to: `marc-os-frontend-cursor:3023`
-   - Enable SSL
-   - Enable WebSocket Support
-
-2. Backend API:
-   - Domain: `api.blog.marc-os.com`
-   - Forward to: `marc-os-backend-cursor:5023`
-   - Enable SSL
-
-## 💻 Development
-
-### Frontend Development
-
-```bash
-cd frontend
-npm install
-PORT=3023 npm start
-```
-
-### Backend Development
-
-```bash
-cd backend
-npm install
-PORT=5023 npm run dev
-```
 
 ## 🔒 Security
 
