@@ -7,28 +7,6 @@ A modern, full-stack blog platform built with React, Node.js, and MongoDB, featu
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 
-## ✨ Features
-
-- 🎨 Beautiful dark theme using Catppuccin Mocha
-- 📱 Fully responsive design
-- 🔐 Secure admin authentication
-- 📝 Rich text blog post editor
-- 🚀 Docker containerization
-- 🔄 Reverse proxy support with NPM
-- 💾 MongoDB database integration
-- 🛡️ JWT authentication
-- 🌐 Modern React frontend
-- 🎯 Express.js backend API
-
-## 🏗️ Architecture
-
-```
-marc-os-blog/
-├── frontend/          # React frontend application (Port 3023)
-├── backend/           # Node.js/Express backend API (Port 5023)
-├── mongodb/           # MongoDB data persistence
-└── docker-compose.yml # Container orchestration
-```
 
 ## 🚀 Quick Start
 
