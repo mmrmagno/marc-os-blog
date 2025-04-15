@@ -134,12 +134,6 @@ PORT=5023 npm run dev
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
-
-**Marc**
-- Website: [marc-os.com](https://blog.marc-os.com)
-- Github: [@mmrmagno](https://github.com/yourusername)
-
 ## 🙏 Acknowledgments
 
 - Catppuccin Theme for the beautiful color scheme
