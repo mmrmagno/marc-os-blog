@@ -10,13 +10,6 @@ A modern, full-stack blog platform built with React, Node.js, and MongoDB, featu
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Docker and Docker Compose
-- Node Package Manager (NPM)
-- Nginx Proxy Manager
-- Domain with DNS configured
-
 ### Environment Setup
 
 1. Clone the repository:
