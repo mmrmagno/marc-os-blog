@@ -1,6 +1,6 @@
 # 🌐 Marc-OS Blog Platform
 
-A modern, full-stack blog platform built with React, Node.js, and MongoDB, featuring a beautiful dark theme based on Catppuccin Mocha.
+A modern blog platform built with React, Node.js, and MongoDB, featuring Catppuccin Mocha theme.
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
@@ -32,28 +32,10 @@ A modern, full-stack blog platform built with React, Node.js, and MongoDB, featu
    docker compose up --build -d
    ```
 
-## 🔒 Security
-
-- Environment variables for sensitive data
-- JWT authentication for admin access
-- Secure password hashing with bcrypt
-- CORS protection
-- Rate limiting on authentication routes
-
 ## 📦 Dependencies
 
-### Frontend
-- React
-- React Router
-- Tailwind CSS
-- Axios
-
-### Backend
-- Express.js
-- Mongoose
-- JWT
-- bcrypt
-- cors
+- Docker
+- Docker Compose
 
 ## 🤝 Contributing
 
@@ -69,5 +51,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Catppuccin Theme for the beautiful color scheme
-- The open-source community for the amazing tools 
+- [Catppuccin](https://github.com/catppuccin) Theme for the great color scheme
