@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { 
+  BrowserRouter as Router, 
+  Routes, 
+  Route, 
+  Navigate, 
+  useNavigate, 
+  useLocation,
+  createBrowserRouter,
+  RouterProvider
+} from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Blog from './pages/Blog';
@@ -59,44 +68,64 @@ function App() {
     setIsAuthenticated(false);
   };
 
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/about",
+      element: <About />,
+    },
+    {
+      path: "/blog",
+      element: <Blog />,
+    },
+    {
+      path: "/blog/:id",
+      element: <BlogPost />,
+    },
+    {
+      path: "/login",
+      element: (
+        <ProtectedRoute>
+          {isAuthenticated ? 
+            <Navigate to="/dashboard" /> : 
+            <Login setIsAuthenticated={setIsAuthenticated} />
+          }
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/dashboard",
+      element: (
+        <ProtectedRoute>
+          {isAuthenticated ? 
+            <Dashboard /> : 
+            <Navigate to="/login" />
+          }
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "*",
+      element: <NotFound />,
+    }
+  ], {
+    future: {
+      v7_startTransition: true,
+      v7_relativeSplatPath: true
+    }
+  });
+
   return (
-    <Router>
-      <div className="app">
-        <Navbar isAuthenticated={isAuthenticated} logOut={logOut} />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<BlogPost />} />
-            <Route 
-              path="/login" 
-              element={
-                <ProtectedRoute>
-                  {isAuthenticated ? 
-                    <Navigate to="/dashboard" /> : 
-                    <Login setIsAuthenticated={setIsAuthenticated} />
-                  }
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  {isAuthenticated ? 
-                    <Dashboard /> : 
-                    <Navigate to="/login" />
-                  }
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <div className="app">
+      <Navbar isAuthenticated={isAuthenticated} logOut={logOut} />
+      <main className="main-content">
+        <RouterProvider router={router} />
+      </main>
+      <Footer />
+    </div>
   );
 }
 
