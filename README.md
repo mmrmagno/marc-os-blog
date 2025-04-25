@@ -1,43 +1,14 @@
 # 🌐 Marc-OS Blog Platform
 
-A modern, full-stack blog platform built with React, Node.js, and MongoDB, featuring a beautiful dark theme based on Catppuccin Mocha.
+A modern blog platform built with React, Node.js, and MongoDB, featuring Catppuccin Mocha theme.
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 
-## ✨ Features
-
-- 🎨 Beautiful dark theme using Catppuccin Mocha
-- 📱 Fully responsive design
-- 🔐 Secure admin authentication
-- 📝 Rich text blog post editor
-- 🚀 Docker containerization
-- 🔄 Reverse proxy support with NPM
-- 💾 MongoDB database integration
-- 🛡️ JWT authentication
-- 🌐 Modern React frontend
-- 🎯 Express.js backend API
-
-## 🏗️ Architecture
-
-```
-marc-os-blog/
-├── frontend/          # React frontend application (Port 3023)
-├── backend/           # Node.js/Express backend API (Port 5023)
-├── mongodb/           # MongoDB data persistence
-└── docker-compose.yml # Container orchestration
-```
 
 ## 🚀 Quick Start
-
-### Prerequisites
-
-- Docker and Docker Compose
-- Node Package Manager (NPM)
-- Nginx Proxy Manager
-- Domain with DNS configured
 
 ### Environment Setup
 
@@ -56,71 +27,15 @@ marc-os-blog/
 
 ### 🐳 Docker Deployment
 
-1. Create the proxy network:
-   ```bash
-   docker network create proxy
-   ```
-
 2. Build and start the containers:
    ```bash
    docker compose up --build -d
    ```
 
-### 🔧 NPM Configuration
-
-Configure the following proxy hosts in Nginx Proxy Manager:
-
-1. Blog Frontend:
-   - Domain: `blog.marc-os.com`
-   - Forward to: `marc-os-frontend-cursor:3023`
-   - Enable SSL
-   - Enable WebSocket Support
-
-2. Backend API:
-   - Domain: `api.blog.marc-os.com`
-   - Forward to: `marc-os-backend-cursor:5023`
-   - Enable SSL
-
-## 💻 Development
-
-### Frontend Development
-
-```bash
-cd frontend
-npm install
-PORT=3023 npm start
-```
-
-### Backend Development
-
-```bash
-cd backend
-npm install
-PORT=5023 npm run dev
-```
-
-## 🔒 Security
-
-- Environment variables for sensitive data
-- JWT authentication for admin access
-- Secure password hashing with bcrypt
-- CORS protection
-- Rate limiting on authentication routes
-
 ## 📦 Dependencies
 
-### Frontend
-- React
-- React Router
-- Tailwind CSS
-- Axios
-
-### Backend
-- Express.js
-- Mongoose
-- JWT
-- bcrypt
-- cors
+- Docker
+- Docker Compose
 
 ## 🤝 Contributing
 
@@ -134,13 +49,6 @@ PORT=5023 npm run dev
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
-
-**Marc**
-- Website: [marc-os.com](https://blog.marc-os.com)
-- Github: [@mmrmagno](https://github.com/yourusername)
-
 ## 🙏 Acknowledgments
 
-- Catppuccin Theme for the beautiful color scheme
-- The open-source community for the amazing tools 
+- [Catppuccin](https://github.com/catppuccin) Theme for the great color scheme
