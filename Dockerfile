@@ -8,15 +8,15 @@ FROM node:22-alpine AS build
 WORKDIR /app
 
 # Install pnpm via corepack (pinned to a known version).
-RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
+RUN corepack enable && corepack prepare pnpm@11.2.2 --activate
 
 # Install deps with a clean cache mount. Lockfile is required.
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
     if [ -f pnpm-lock.yaml ]; then \
-      pnpm install --frozen-lockfile; \
+      pnpm install --frozen-lockfile --ignore-scripts; \
     else \
-      pnpm install --no-frozen-lockfile; \
+      pnpm install --no-frozen-lockfile --ignore-scripts; \
     fi
 
 # Copy source and build.
