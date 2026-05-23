@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Fetch JetBrains Mono web fonts into public/fonts.
-# Run once locally; commit the .woff2 files so the build is self-contained.
 
 set -euo pipefail
 

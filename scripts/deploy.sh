@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Pull latest image and recreate containers with zero-downtime intent.
-# Usage: ./scripts/deploy.sh   (run on the VPS, in the repo root)
 
 set -euo pipefail
 

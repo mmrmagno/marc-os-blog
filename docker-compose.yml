@@ -1,38 +1,23 @@
-# Single-service compose. The blog container joins the existing
-# Nginx Proxy Manager network so NPM can reach it by container
-# name (`marc-os-app`) on port 8080. TLS, security headers, and
-# cert renewal are all handled by NPM at the edge.
-
 name: marc-os-blog
-
 services:
   app:
     image: ${IMAGE_TAG:-ghcr.io/mmrmagno/marc-os-blog:latest}
     container_name: marc-os-app
     restart: unless-stopped
-
-    # ── Hardening ─────────────────────────────────────────────
     read_only: true
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
-
-    # nginx needs to write to a couple of dirs even with a read-only
-    # root FS — give them as tmpfs (101 = nginx uid in the alpine image)
     tmpfs:
       - /var/cache/nginx:size=20m,mode=0770,uid=101,gid=101
       - /var/run:size=2m,mode=0770,uid=101,gid=101
       - /tmp:size=10m,mode=1777
-
-    # ── Networking ────────────────────────────────────────────
-    # No host ports — NPM reaches us over the shared docker network.
     networks:
       - proxy
     expose:
       - "8080"
 
-    # ── Healthcheck ───────────────────────────────────────────
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz || exit 1"]
       interval: 30s
@@ -40,7 +25,6 @@ services:
       retries: 3
       start_period: 5s
 
-    # ── Logging ───────────────────────────────────────────────
     logging:
       driver: json-file
       options:
@@ -48,7 +32,6 @@ services:
         max-file: "3"
 
 networks:
-  # The existing NPM network, referenced by its real name from .env.
   proxy:
     name: ${PROXY_NETWORK:?PROXY_NETWORK required in .env}
     external: true

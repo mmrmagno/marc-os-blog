@@ -23,7 +23,7 @@ node_modules/
 npm-debug.log*
 pnpm-debug.log*
 
-# Migration scratchpads
+# Migration stuff
 MIGRATION_NOTES.md
 migration-backup/
 marc-os-blog.tar.gz

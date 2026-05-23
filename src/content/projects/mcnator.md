@@ -5,6 +5,6 @@ pubDate: 2024-01-01
 tags: ["python", "discord", "minecraft", "bot"]
 repo: "https://github.com/mmrmagno/mcnator"
 status: "active"
-featured: false
+featured: true 
 draft: false
 ---

@@ -1,7 +1,7 @@
 ---
 title: "marc-os-blog"
-description: "This site. Astro + Docker, fronted by Nginx Proxy Manager, themed Catppuccin Mocha with a matrix rain background."
-pubDate: 2026-05-23
+description: "This site. Astro + Docker, themed Catppuccin Mocha."
+pubDate: 2025-03-23
 tags: ["astro", "nginx", "docker", "self-hosted"]
 repo: "https://github.com/mmrmagno/marc-os-blog"
 url: "https://marc-os.com"
@@ -15,12 +15,8 @@ this page is the dev diary.
 
 ## design constraints
 
-- **single VPS, single Docker container** — no Kubernetes, no managed services
-- **content in markdown, in git** — no admin panel, no DB
-- **edge proxy is the existing NPM** — one ACME client, one place to manage TLS
-- **zero third-party requests at runtime** — fonts self-hosted, no analytics, no CDN scripts
-- **strict CSP** — no inline scripts other than the matrix canvas bootstrap
-- **<100kb per page** at the wire, before compression
+- **single VPS, single Docker container**
+- **content in markdown, in git**
 
 ## things I'd like to add
 

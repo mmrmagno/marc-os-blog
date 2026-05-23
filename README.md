@@ -1,8 +1,7 @@
 # marc-os-blog
 
 > Static site for [marc-os.com](https://marc-os.com). Built with Astro,
-> served by a hardened nginx container, fronted by an existing
-> Nginx Proxy Manager instance.
+> served by nginx
 
 ```
  ┌──────────────┐    ┌────────────────────┐    ┌────────────────────┐
@@ -26,20 +25,6 @@
                                               │  └────────────────┘  │
                                               └──────────────────────┘
 ```
-
-## Stack
-
-| Layer       | Choice                                        | Why                                                    |
-|-------------|-----------------------------------------------|--------------------------------------------------------|
-| SSG         | Astro                                         | Zero JS by default, content collections, fast builds   |
-| Content     | Markdown + frontmatter in `src/content/`      | Git is the database — no DB, no admin, no CVEs         |
-| Theme       | Catppuccin Mocha + Matrix rain                | Pretty + on-brand                                      |
-| App server  | nginx 1.27 alpine (in-container)              | Tiny, well-understood, sane defaults                   |
-| Edge proxy  | Nginx Proxy Manager (already on the VPS)      | One ACME client, one place to manage TLS               |
-| Container   | Multi-stage Docker build                      | ~25MB final image                                      |
-| Orchestration | Docker Compose                              | One VPS, no need for k8s                               |
-| CI/CD       | GitHub Actions → GHCR → SSH deploy            | Reproducible, cosign-signed images, SLSA provenance    |
-| Hardening   | read-only FS, no-new-privileges, cap_drop ALL, non-root, CSP, HSTS | Defense in depth          |
 
 ## Local development
 
@@ -79,8 +64,6 @@ $EDITOR .env                # set PROXY_NETWORK
 docker compose up -d
 ```
 
-Then add the proxy host in NPM — see **[docs/NPM-SETUP.md](docs/NPM-SETUP.md)**.
-
 CI builds and pushes `ghcr.io/mmrmagno/marc-os-blog:latest` on every push
 to `main`. To redeploy after a CI build:
 
@@ -91,38 +74,25 @@ docker compose pull && docker compose up -d
 The included `.github/workflows/deploy.yml` does this over SSH on each
 green build.
 
-## Security posture
-
-- HTTPS-only via NPM, HSTS preload-ready, TLS 1.2+
-- Strict CSP, full security-headers set (see `docs/NPM-SETUP.md`)
-- App container runs as non-root with read-only root filesystem
-- All Linux capabilities dropped, `no-new-privileges` enforced
-- No host ports — only NPM can reach the app, over its internal network
-- Images pinned by digest in production
-- Trivy scans on every CI run, blocks on HIGH/CRITICAL
-- No databases, no user input, no auth surface
-- Cosign keyless signing + SLSA provenance on every image
-
 ## Repository layout
 
 ```
 src/
-├── components/         # Astro components (Header, Footer, MatrixBackground, ...)
+├── components/
 ├── content/
-│   ├── blog/           # ← write posts here
-│   ├── projects/       # ← write projects here
-│   └── config.ts       # frontmatter schema
+│   ├── blog/
+│   ├── projects/
+│   └── config.ts
 ├── layouts/
-├── pages/              # routes, including /blog, /projects, /rss.xml
-├── styles/             # Catppuccin Mocha tokens + global CSS
-└── lib/                # site-wide config
+├── pages/
+├── styles/
+└── lib/
 
-infra/                  # in-container nginx config (served on :8080)
-docs/NPM-SETUP.md       # how to wire this up to Nginx Proxy Manager
-.github/workflows/      # CI: build, scan, sign; deploy on green
-MIGRATION.md            # Claude Code playbook for the v1 → v2 migration
+infra/
+docs/NPM-SETUP.md
+.github/workflows/
 ```
 
 ## License
 
-MIT
+[MIT](LICENSE) 
