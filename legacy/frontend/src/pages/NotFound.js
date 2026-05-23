@@ -40,7 +40,7 @@ const NotFound = () => {
           <div className="console-content">
             <span className="console-line">
               <span className="console-prompt">marc@marc-os:</span>
-              <span className="console-dir">~/blog.marc-os.com</span>$ 
+              <span className="console-dir">~/marc-os.com</span>$ 
               <span className="console-command">find</span> page
             </span>
             <span className="console-line">

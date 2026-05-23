@@ -1,0 +1,79 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ProjectCard from '@components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+});
+---
+
+<BaseLayout title="projects" description="Things I've built, broken, and occasionally finished.">
+  <section class="container projects-index">
+    <header class="page-header">
+      <h1>projects</h1>
+      <p class="dim">things I've built — open source, infra experiments, homelab toys.</p>
+    </header>
+
+    <div class="grid">
+      {projects.map((p) => (
+        <ProjectCard
+          title={p.data.title}
+          description={p.data.description}
+          href={`/projects/${p.slug}`}
+          repo={p.data.repo}
+          url={p.data.url}
+          status={p.data.status}
+          tags={p.data.tags}
+        />
+      ))}
+    </div>
+
+    {projects.length === 0 && (
+      <div class="empty">
+        <p>no projects yet — drop a markdown file in <code>src/content/projects/</code>.</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .projects-index { padding: 2rem 1.25rem 3rem; max-width: var(--max-w-wide); }
+
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--border);
+  }
+  .page-header h1 {
+    margin: 0;
+    font-size: 1.7rem;
+  }
+  .page-header h1::before {
+    content: '# ';
+    color: var(--accent);
+  }
+  .dim {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin: 0.4rem 0 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+  @media (min-width: 720px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .empty {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+  }
+</style>

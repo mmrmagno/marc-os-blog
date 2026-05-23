@@ -1,0 +1,98 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PostCard from '@components/PostCard.astro';
+import Search from '@components/Search.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+// Group by year
+const byYear = posts.reduce<Record<number, typeof posts>>((acc, p) => {
+  const y = p.data.pubDate.getFullYear();
+  (acc[y] ??= []).push(p);
+  return acc;
+}, {});
+
+const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+---
+
+<BaseLayout title="blog" description="Writing about infrastructure, devops, and homelab adventures.">
+  <section class="container blog-index">
+    <header class="page-header">
+      <h1>blog</h1>
+      <p class="dim">{posts.length} post{posts.length === 1 ? '' : 's'} · sorted newest first</p>
+    </header>
+
+    <Search />
+
+    {years.map((year) => (
+      <section class="year">
+        <h2 class="year-title">## {year}</h2>
+        <div class="list">
+          {byYear[year].map((p) => (
+            <PostCard
+              href={`/blog/${p.slug}`}
+              title={p.data.title}
+              description={p.data.description}
+              pubDate={p.data.pubDate}
+              tags={p.data.tags}
+            />
+          ))}
+        </div>
+      </section>
+    ))}
+
+    {posts.length === 0 && (
+      <div class="empty">
+        <p>no posts yet — drop a markdown file in <code>src/content/blog/</code>.</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-index { padding: 2rem 1.25rem 3rem; }
+
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--border);
+  }
+  .page-header h1 {
+    margin: 0;
+    font-size: 1.7rem;
+  }
+  .page-header h1::before {
+    content: '# ';
+    color: var(--accent);
+  }
+  .dim {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin: 0.4rem 0 0;
+  }
+
+  .year { margin-bottom: 2.4rem; }
+  .year-title {
+    color: var(--ctp-peach);
+    font-size: 1rem;
+    margin: 0 0 0.9rem;
+    font-weight: 500;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .empty {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+  }
+</style>

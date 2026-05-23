@@ -1,0 +1,174 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PostCard from '@components/PostCard.astro';
+import ProjectCard from '@components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 4);
+
+const featured = (await getCollection('projects', ({ data }) => !data.draft && data.featured))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout>
+  <section class="hero container">
+    <pre class="ascii" aria-hidden="true">
+{`┌─[ marc-os ]──────────────────────────────────┐
+│  $ whoami                                    │
+│  infra · devops · homelab operator           │
+│  $ uptime                                    │
+│  building things, breaking things, fixing    │
+│  them again. occasionally writing it down.   │
+└──────────────────────────────────────────────┘`}
+    </pre>
+
+    <p class="lede">
+      <span class="prompt">$</span> Welcome. I write about
+      <span class="hl">infrastructure</span>,
+      <span class="hl">devops</span>, and the occasional 2am
+      <span class="hl">debugging story</span>.
+    </p>
+
+    <div class="cta">
+      <a href="/blog" class="btn">read the blog →</a>
+      <a href="/projects" class="btn btn-ghost">browse projects →</a>
+    </div>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="container section">
+      <h2 class="section-title">// recent posts</h2>
+      <div class="list">
+        {posts.map((p) => (
+          <PostCard
+            href={`/blog/${p.slug}`}
+            title={p.data.title}
+            description={p.data.description}
+            pubDate={p.data.pubDate}
+            tags={p.data.tags}
+          />
+        ))}
+      </div>
+      <p class="see-all"><a href="/blog">→ see all posts</a></p>
+    </section>
+  )}
+
+  {featured.length > 0 && (
+    <section class="container section">
+      <h2 class="section-title">// featured projects</h2>
+      <div class="grid">
+        {featured.map((p) => (
+          <ProjectCard
+            title={p.data.title}
+            description={p.data.description}
+            href={`/projects/${p.slug}`}
+            repo={p.data.repo}
+            url={p.data.url}
+            status={p.data.status}
+            tags={p.data.tags}
+          />
+        ))}
+      </div>
+      <p class="see-all"><a href="/projects">→ all projects</a></p>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-top: 2.2rem;
+    padding-bottom: 2rem;
+  }
+
+  .ascii {
+    margin: 0 0 1.5rem;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: var(--accent);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    overflow-x: auto;
+    text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  .lede {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin: 0.5rem 0 1.4rem;
+    line-height: 1.7;
+  }
+
+  .prompt { color: var(--accent); margin-right: 0.4em; }
+  .hl { color: var(--ctp-mauve); }
+
+  .cta {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.55em 1.1em;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    transition: all 150ms ease;
+  }
+  .btn:hover {
+    background: color-mix(in srgb, var(--accent) 25%, transparent);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ctp-blue);
+    border-color: color-mix(in srgb, var(--ctp-blue) 40%, transparent);
+  }
+  .btn-ghost:hover {
+    color: var(--ctp-blue);
+    background: color-mix(in srgb, var(--ctp-blue) 12%, transparent);
+    border-color: var(--ctp-blue);
+  }
+
+  .section { padding-top: 2.5rem; }
+  .section-title {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: lowercase;
+    margin: 0 0 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  @media (min-width: 720px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .see-all {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+  }
+  .see-all a { color: var(--text-dim); border: 0; }
+  .see-all a:hover { color: var(--accent); }
+</style>

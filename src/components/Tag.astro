@@ -1,0 +1,39 @@
+---
+interface Props {
+  tag: string;
+  href?: string;
+}
+const { tag, href } = Astro.props;
+const target = href ?? `/blog/tags/${tag.toLowerCase()}`;
+---
+
+<a class="tag" href={target}>
+  <span class="hash">#</span>{tag}
+</a>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ctp-teal);
+    background: color-mix(in srgb, var(--ctp-teal) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ctp-teal) 25%, transparent);
+    border-radius: 999px;
+    padding: 0.15em 0.7em;
+    line-height: 1.4;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  }
+
+  .tag:hover {
+    background: color-mix(in srgb, var(--ctp-teal) 18%, transparent);
+    border-color: var(--ctp-teal);
+    color: var(--ctp-teal);
+  }
+
+  .hash {
+    color: var(--ctp-overlay1);
+    margin-right: 1px;
+  }
+</style>

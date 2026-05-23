@@ -1,0 +1,195 @@
+---
+/**
+ * Static search powered by Pagefind. The index is generated at build time
+ * (see `pnpm build`) and dropped into `dist/_pagefind/`. Zero runtime
+ * server cost; one `fetch` to the JSON shards on first keystroke.
+ */
+---
+
+<div class="search-wrap">
+  <label for="search-input" class="sr-only">Search</label>
+  <div class="search-box">
+    <span class="prompt" aria-hidden="true">$</span>
+    <input
+      id="search-input"
+      type="search"
+      placeholder="search posts... (press / to focus)"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <kbd class="kbd">/</kbd>
+  </div>
+  <div id="search-results" class="results" aria-live="polite"></div>
+</div>
+
+<style>
+  .search-wrap { margin: 1.5rem 0; }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.6em 0.9em;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  .search-box:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  .search-box .prompt {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .search-box input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+  }
+  .search-box input::placeholder { color: var(--text-dim); }
+
+  .kbd {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1em 0.45em;
+  }
+
+  .results {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .results :global(.r-item) {
+    padding: 0.7em 0.9em;
+    background: color-mix(in srgb, var(--bg-elevated) 60%, transparent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 120ms ease;
+  }
+  .results :global(.r-item:hover) {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  }
+  .results :global(.r-title) {
+    color: var(--text);
+    font-size: 0.95rem;
+    border: 0;
+    display: block;
+    margin-bottom: 0.2em;
+  }
+  .results :global(.r-title:hover) { color: var(--accent); }
+  .results :global(.r-excerpt) {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .results :global(.r-excerpt mark) {
+    background: color-mix(in srgb, var(--accent) 25%, transparent);
+    color: var(--accent);
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  .results :global(.r-empty) {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    padding: 0.6em 0.2em;
+  }
+</style>
+
+<script>
+  // Pagefind is loaded lazily — only when the user actually focuses the input.
+  // Keeps the initial page weight tiny.
+  type PagefindResult = {
+    id: string;
+    data: () => Promise<{
+      url: string;
+      meta: { title?: string };
+      excerpt: string;
+    }>;
+  };
+  type PagefindModule = {
+    search: (q: string) => Promise<{ results: PagefindResult[] }>;
+  };
+
+  const input = document.getElementById('search-input') as HTMLInputElement | null;
+  const results = document.getElementById('search-results') as HTMLDivElement | null;
+  if (!input || !results) {
+    // Page without search; nothing to do.
+  } else {
+    let pagefind: PagefindModule | null = null;
+    let loading = false;
+
+    const loadPagefind = async () => {
+      if (pagefind || loading) return;
+      loading = true;
+      try {
+        // @ts-expect-error — Pagefind is loaded at runtime from a built path.
+        pagefind = (await import('/_pagefind/pagefind.js')) as PagefindModule;
+      } catch (err) {
+        console.warn('search index not available yet — `pnpm build` first', err);
+      } finally {
+        loading = false;
+      }
+    };
+
+    let debounce = 0;
+    const run = async (q: string) => {
+      if (!pagefind) await loadPagefind();
+      if (!pagefind || !results) return;
+
+      if (!q.trim()) {
+        results.innerHTML = '';
+        return;
+      }
+
+      const search = await pagefind.search(q);
+      if (search.results.length === 0) {
+        results.innerHTML = '<div class="r-empty">no matches.</div>';
+        return;
+      }
+
+      const items = await Promise.all(search.results.slice(0, 8).map((r) => r.data()));
+      results.innerHTML = items
+        .map(
+          (d) => `
+        <div class="r-item">
+          <a class="r-title" href="${d.url.replace(/\.html$/, '')}">${
+            d.meta?.title ?? d.url
+          }</a>
+          <p class="r-excerpt">${d.excerpt}</p>
+        </div>`,
+        )
+        .join('');
+    };
+
+    input.addEventListener('focus', loadPagefind, { once: true });
+    input.addEventListener('input', () => {
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(() => run(input.value), 120);
+    });
+
+    // Press "/" to focus search (skip when typing in another input).
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+      const t = e.target as HTMLElement | null;
+      if (t && /input|textarea|select/i.test(t.tagName)) return;
+      e.preventDefault();
+      input.focus();
+    });
+  }
+</script>

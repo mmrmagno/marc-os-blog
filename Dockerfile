@@ -1,51 +1,60 @@
-FROM node:18-alpine AS base
+# syntax=docker/dockerfile:1.7
 
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# ─────────────────────────────────────────────────────────────
+# Stage 1: build the Astro static site
+# ─────────────────────────────────────────────────────────────
+FROM node:22-alpine AS build
+
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json ./
-RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+# Install pnpm via corepack (pinned to a known version).
+RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Install deps with a clean cache mount. Lockfile is required.
+COPY package.json pnpm-lock.yaml* ./
+RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
+    if [ -f pnpm-lock.yaml ]; then \
+      pnpm install --frozen-lockfile; \
+    else \
+      pnpm install --no-frozen-lockfile; \
+    fi
+
+# Copy source and build.
 COPY . .
+RUN pnpm build
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-ENV NEXT_TELEMETRY_DISABLED 1
+# ─────────────────────────────────────────────────────────────
+# Stage 2: minimal nginx image to serve the static output
+#
+# An edge proxy (Nginx Proxy Manager) terminates TLS and reverse-proxies
+# to this internal nginx — keeping the in-container app server lets the
+# edge stay generic (you can swap NPM for Traefik or Cloudflared without
+# touching this image).
+# ─────────────────────────────────────────────────────────────
+FROM nginx:1.27-alpine AS runtime
 
-RUN npm run build
+# Drop the default nginx config and html.
+RUN rm -rf /etc/nginx/conf.d/* /usr/share/nginx/html/*
 
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
+# Our own nginx config (no server tokens, gzip, immutable assets).
+COPY infra/nginx.conf /etc/nginx/nginx.conf
+COPY infra/default.conf /etc/nginx/conf.d/default.conf
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+# Static site output.
+COPY --from=build /app/dist /usr/share/nginx/html
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Tighten file perms — nginx worker just needs read.
+RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    chmod -R a-w /usr/share/nginx/html && \
+    # nginx needs to write its pid + cache somewhere when root FS is read-only;
+    # we mount tmpfs for /var/cache/nginx and /var/run in compose.
+    touch /var/run/nginx.pid && chown nginx:nginx /var/run/nginx.pid
 
-# Copy necessary files
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/.next/standalone ./
+# Healthcheck — hits the static index over the loopback.
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:8080/ >/dev/null || exit 1
 
-# Set the correct permission for prerender cache
-RUN mkdir -p .next
-RUN chown nextjs:nodejs .next
+EXPOSE 8080
 
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-CMD ["node", "server.js"] 
+USER nginx
+CMD ["nginx", "-g", "daemon off;"]

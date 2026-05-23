@@ -1,0 +1,84 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Tag from '@components/Tag.astro';
+import FormattedDate from '@components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((p) => ({
+    params: { slug: p.slug },
+    props: p,
+  }));
+}
+
+type Props = CollectionEntry<'projects'>;
+const project = Astro.props;
+const { Content } = await project.render();
+
+const statusLabel: Record<string, string> = {
+  active: '● active',
+  maintained: '● maintained',
+  archived: '○ archived',
+  wip: '◐ wip',
+};
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <article class="container project">
+    <header class="proj-header">
+      <a href="/projects" class="back">← back to /projects</a>
+      <h1>{project.data.title}</h1>
+      <div class="meta">
+        <FormattedDate date={project.data.pubDate} />
+        <span class="sep">·</span>
+        <span class={`status status-${project.data.status}`}>{statusLabel[project.data.status]}</span>
+      </div>
+      {project.data.tags.length > 0 && (
+        <div class="tags">{project.data.tags.map((t) => <Tag tag={t} />)}</div>
+      )}
+      <div class="links">
+        {project.data.repo && <a href={project.data.repo} rel="noopener" class="ext">→ source</a>}
+        {project.data.url && <a href={project.data.url} rel="noopener" class="ext">→ live</a>}
+      </div>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project { padding: 2rem 1.25rem 3rem; }
+  .proj-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px dashed var(--border);
+  }
+  .back { font-size: 0.82rem; color: var(--text-dim); border: 0; }
+  .back:hover { color: var(--accent); }
+  .proj-header h1 {
+    margin: 0.6em 0 0.3em;
+    font-size: 2rem;
+  }
+  .proj-header h1::before {
+    content: '> ';
+    color: var(--accent);
+  }
+  .meta {
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .sep { color: var(--ctp-overlay1); }
+  .status-active { color: var(--ctp-green); }
+  .status-maintained { color: var(--ctp-teal); }
+  .status-wip { color: var(--ctp-peach); }
+  .status-archived { color: var(--ctp-overlay1); }
+  .tags { margin-top: 0.85rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .links { margin-top: 1rem; display: flex; gap: 1.2rem; font-size: 0.88rem; }
+  .ext { color: var(--ctp-blue); border: 0; }
+  .ext:hover { color: var(--ctp-lavender); }
+</style>

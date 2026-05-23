@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marc-os.com/sitemap-index.xml

@@ -1,0 +1,106 @@
+---
+import Tag from './Tag.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  repo?: string;
+  url?: string;
+  status?: 'active' | 'maintained' | 'archived' | 'wip';
+  tags?: string[];
+}
+
+const { title, description, href, repo, url, status = 'active', tags = [] } = Astro.props;
+
+const statusLabel: Record<string, string> = {
+  active: '● active',
+  maintained: '● maintained',
+  archived: '○ archived',
+  wip: '◐ wip',
+};
+---
+
+<article class="proj">
+  <header class="proj-head">
+    <h3><a href={href}>{title}</a></h3>
+    <span class={`status status-${status}`}>{statusLabel[status]}</span>
+  </header>
+  <p class="desc">{description}</p>
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.map((t) => <Tag tag={t} />)}
+    </div>
+  )}
+  {(repo || url) && (
+    <div class="links">
+      {repo && <a href={repo} rel="noopener" class="ext-link">→ source</a>}
+      {url && <a href={url} rel="noopener" class="ext-link">→ live</a>}
+    </div>
+  )}
+</article>
+
+<style>
+  .proj {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.2rem;
+    background: color-mix(in srgb, var(--bg-elevated) 55%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+
+  .proj:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);
+  }
+
+  .proj-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .proj h3 { margin: 0; font-size: 1.05rem; }
+  .proj h3::before {
+    content: '> ';
+    color: var(--accent);
+  }
+  .proj h3 a { color: var(--text); border: 0; }
+  .proj h3 a:hover { color: var(--accent); }
+
+  .desc { margin: 0; color: var(--text-muted); font-size: 0.9rem; }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .status {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .status-active { color: var(--ctp-green); }
+  .status-maintained { color: var(--ctp-teal); }
+  .status-wip { color: var(--ctp-peach); }
+  .status-archived { color: var(--ctp-overlay1); }
+
+  .links {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.82rem;
+  }
+
+  .ext-link {
+    color: var(--ctp-blue);
+    border: 0;
+  }
+  .ext-link:hover { color: var(--ctp-lavender); }
+</style>

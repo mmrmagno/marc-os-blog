@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { SITE } from '@lib/config';
+---
+
+<BaseLayout title="about" description={`About ${SITE.author}`}>
+  <section class="container about">
+    <h1># about</h1>
+
+    <pre class="ascii" aria-hidden="true">
+{`$ cat /etc/motd
+
+   role        : infra & devops engineer
+   focus       : kubernetes, observability, automation
+   interests   : homelab, security, self-hosting
+   pgp         : (publish a key here)
+   contact     : hello@marc-os.com`}
+    </pre>
+
+    <p>
+      Hi — I'm Marc. I run servers for fun and occasionally for money. This site is where
+      I take notes in public about things I've learned the hard way.
+    </p>
+
+    <h2>## stack of choice</h2>
+    <ul>
+      <li><strong>infra</strong>: terraform, ansible, nix on the edges</li>
+      <li><strong>runtime</strong>: docker, kubernetes (k3s at home)</li>
+      <li><strong>obs</strong>: prometheus + grafana + loki, alloy on hosts</li>
+      <li><strong>edge</strong>: nginx proxy manager, traefik, cloudflare tunnels</li>
+      <li><strong>cli</strong>: zsh, neovim, tmux, the usual suspects</li>
+    </ul>
+
+    <h2>## this site</h2>
+    <p>
+      Built with <a href="https://astro.build" rel="noopener">Astro</a>. Content is plain
+      markdown in <code>src/content/</code>. Themed with
+      <a href="https://catppuccin.com" rel="noopener">Catppuccin Mocha</a>.
+      No JS frameworks, no third-party trackers, no analytics, no databases.
+    </p>
+    <p>
+      Hosted on a single VPS, served by a hardened container fronted by
+      Nginx Proxy Manager. Source is on <a href={SITE.social.github} rel="noopener">GitHub</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .about { padding: 2rem 1.25rem 3rem; }
+  .about h1 { margin-top: 0; }
+  .ascii {
+    color: var(--ctp-teal);
+    font-size: 0.82rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    margin: 1.5rem 0;
+  }
+  strong { color: var(--accent); font-weight: 600; }
+</style>

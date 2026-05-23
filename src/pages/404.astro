@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 — not found" description="Page not found" noIndex>
+  <section class="container notfound">
+    <pre class="ascii" aria-hidden="true">
+{`  ____   ___  _  _   
+ |___ \\ / _ \\| || |  
+   __) | | | | || |_ 
+  / __/| |_| |__   _|
+ |_____|\\___/   |_|  `}
+    </pre>
+    <h1>signal lost</h1>
+    <p>the path <code>{Astro.url.pathname}</code> doesn't resolve.</p>
+    <p><a href="/" class="btn">→ return home</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding: 4rem 1.25rem;
+    text-align: center;
+  }
+  .ascii {
+    color: var(--ctp-red);
+    margin: 0 auto 1.5rem;
+    display: inline-block;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    font-size: 0.95rem;
+    text-shadow: 0 0 14px color-mix(in srgb, var(--ctp-red) 35%, transparent);
+  }
+  h1 {
+    color: var(--ctp-red);
+    margin: 0 0 0.6rem;
+  }
+  .btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.55em 1.1em;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+  }
+</style>

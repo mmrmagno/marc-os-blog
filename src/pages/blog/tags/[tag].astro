@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PostCard from '@components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const tagSet = new Set<string>();
+  posts.forEach((p) => p.data.tags.forEach((t) => tagSet.add(t.toLowerCase())));
+
+  return [...tagSet].map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((p) => p.data.tags.map((t) => t.toLowerCase()).includes(tag))
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag}`} description={`Posts tagged #${tag}`}>
+  <section class="container tagpage">
+    <header class="page-header">
+      <a href="/blog" class="back">← back to /blog</a>
+      <h1># {tag}</h1>
+      <p class="dim">{posts.length} post{posts.length === 1 ? '' : 's'}</p>
+    </header>
+    <div class="list">
+      {posts.map((p) => (
+        <PostCard
+          href={`/blog/${p.slug}`}
+          title={p.data.title}
+          description={p.data.description}
+          pubDate={p.data.pubDate}
+          tags={p.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tagpage { padding: 2rem 1.25rem 3rem; }
+  .page-header { margin-bottom: 1.6rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border); }
+  .page-header h1 { margin: 0.6rem 0 0.3rem; color: var(--ctp-teal); }
+  .dim { color: var(--text-dim); font-size: 0.85rem; margin: 0; }
+  .back { font-size: 0.82rem; color: var(--text-dim); border: 0; }
+  .back:hover { color: var(--accent); }
+  .list { display: flex; flex-direction: column; gap: 0.85rem; }
+</style>

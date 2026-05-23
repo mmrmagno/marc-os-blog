@@ -1,0 +1,108 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '@components/FormattedDate.astro';
+import Tag from '@components/Tag.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags?: string[];
+  minutesRead?: number;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags = [],
+  minutesRead,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} type="article" pubDate={pubDate}>
+  <article class="post container">
+    <header class="post-header">
+      <a href="/blog" class="back-link">← back to /blog</a>
+      <h1>{title}</h1>
+      <p class="post-meta">
+        <FormattedDate date={pubDate} />
+        {updatedDate && (
+          <>
+            <span class="sep">·</span>
+            <span class="updated">updated <FormattedDate date={updatedDate} /></span>
+          </>
+        )}
+        {minutesRead && (
+          <>
+            <span class="sep">·</span>
+            <span>{minutesRead} min read</span>
+          </>
+        )}
+      </p>
+      {tags.length > 0 && (
+        <div class="tags">
+          {tags.map((t) => <Tag tag={t} />)}
+        </div>
+      )}
+    </header>
+
+    <div class="prose" data-pagefind-body>
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .post-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .back-link {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    border: 0;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .post-header h1 {
+    margin: 0.6em 0 0.3em;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  .post-header h1::before {
+    content: '# ';
+    color: var(--accent);
+  }
+
+  .post-meta {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .sep { color: var(--ctp-overlay1); }
+  .updated { color: var(--ctp-peach); }
+
+  .tags {
+    margin-top: 0.85rem;
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .prose :global(p) { line-height: 1.75; }
+  .prose :global(a) { border-bottom: 1px dashed currentColor; }
+</style>

@@ -19,7 +19,7 @@ const app = express();
 const corsOptions = {
   origin: [
     'https://marc-os.com',
-    'https://blog.marc-os.com',
+    'https://www.marc-os.com',
     'http://localhost:3000'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
