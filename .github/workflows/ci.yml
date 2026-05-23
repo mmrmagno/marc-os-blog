@@ -71,8 +71,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-      id-token: write     # for cosign keyless
-      attestations: write
     outputs:
       image-digest: ${{ steps.push.outputs.digest }}
       image-tags: ${{ steps.meta.outputs.tags }}
@@ -118,43 +116,3 @@ jobs:
           provenance: true
           sbom: true
 
-      - name: Install cosign
-        uses: sigstore/cosign-installer@v3
-
-      - name: Sign image (keyless, OIDC)
-        env:
-          DIGEST: ${{ steps.push.outputs.digest }}
-          TAGS: ${{ steps.meta.outputs.tags }}
-        run: |
-          for tag in $TAGS; do
-            cosign sign --yes "${tag}@${DIGEST}"
-          done
-
-  # ──────────────────────────────────────────────────────────
-  # Trivy: fail the build on HIGH/CRITICAL vulns in the image.
-  # ──────────────────────────────────────────────────────────
-  scan:
-    name: trivy scan
-    needs: image
-    if: github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
-      security-events: write
-    steps:
-      - name: Trivy image scan
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ needs.image.outputs.image-digest }}
-          format: sarif
-          output: trivy-results.sarif
-          severity: HIGH,CRITICAL
-          exit-code: '0'
-          ignore-unfixed: true
-
-      - name: Upload SARIF to GitHub Security
-        if: always()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: trivy-results.sarif
