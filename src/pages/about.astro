@@ -7,57 +7,155 @@ import { SITE } from '@lib/config';
   <section class="container about">
     <h1># about</h1>
 
-    <pre class="ascii" aria-hidden="true">
-{`$ cat /etc/motd
-
-   name        : Marcos Magno Biriba Ribeiro (Marc)
-   born        : 2005-01-18, São Paulo, Brazil
-   based       : Switzerland
-   interests   : guitar, homelab, self-hosting, security
-   contact     : hello@marc-os.com`}
-    </pre>
+    <div class="terminal" aria-hidden="true">
+      <div class="term-title">─[ marc@marc-os ]</div>
+      <pre class="term-body">  name     : Marcos Magno Biriba Ribeiro (Marc)
+  born     : 2005-01-18, São Paulo, Brazil
+  based    : Switzerland
+  role     : infra/devops @ cerrion.com
+  contact  : contact@marc-os.com</pre>
+    </div>
 
     <p>
-      Hi — I'm Marc. My family names reflect my heritage: Ribeiro is my father's surname,
-      and Biriba comes from my mother's side. I've lived in Brazil, Hungary, and now
-      Switzerland, picking up English, a touch of Hungarian, and working on German along
-      the way.
+      Hello, my name is Marcos Magno Biriba Ribeiro, though I usually go by Marcos Magno (or Marc).
+      My family names reflect my heritage: Ribeiro is my father's surname, and Biriba comes from my
+      mother's side. Born on January 18, 2005, in São Paulo, Brazil, I've always been surrounded by
+      the energy and diversity of one of the world's largest cities.
     </p>
 
     <p>
-      My first spark for technology ignited between 8 and 13 — I taught myself to build
-      an automatic door in Minecraft using command blocks, customised to recognise only
-      my in-game name. My apprenticeship in software development started on August 2nd 2021,
-      inspired by my dad's career. I believe perseverance is the key to overcoming any
-      obstacle — learning a new language, adapting to a new country, or diving into complex
-      technical challenges.
+      My interests are as varied as they are passionate. I love playing guitar, engaging in sports,
+      and spending quality time with friends, family, and my girlfriend. While I cherish moments of
+      creativity and activity, I also appreciate calm, relaxed environments over noisy, crowded
+      parties. I even humorously remark about disliking sleep, after all, if you reach the age of
+      90, you might spend 30 years asleep!
     </p>
 
-    <h2>## this site</h2>
     <p>
-      Built with <a href="https://astro.build" rel="noopener">Astro</a>. Content is plain
-      markdown in <code>src/content/</code>. Themed with
-      <a href="https://catppuccin.com" rel="noopener">Catppuccin Mocha</a>.
-      No JS frameworks, no third-party trackers, no analytics, no databases.
+      My first spark for technology ignited between the ages of 8 and 13. I taught myself to build
+      an automatic door in Minecraft using command blocks. By detecting players within a set radius,
+      the door would open, and I even customised it to recognise only my in-game name, creating a
+      "private" entrance accessible solely to me.
     </p>
+
     <p>
-      Hosted on a single VPS, served by a hardened container fronted by
-      Nginx Proxy Manager. Source is on <a href={SITE.social.github} rel="noopener">GitHub</a>.
+      Over the years, I've navigated challenges that have significantly shaped who I am today.
+      In 2018, I moved from Brazil to Budapest, Hungary, arriving with little knowledge of Hungarian
+      and only basic English. Through relentless effort, I transformed my language skills, and now I
+      speak English fluently with a touch of Hungarian. Then, in 2020, I embraced yet another
+      challenge by moving to Switzerland. Here, I'm diligently working to master German, a language
+      essential for both my professional growth and everyday life.
     </p>
+
+    <p>
+      My journey into technology began with my apprenticeship on August 2nd 2021, inspired by my
+      dad's career, delving into platform development and deepening my understanding of computer
+      hardware, network systems, and innovative solutions. After completing it, I joined the
+      infra/DevOps team at <a href="https://cerrion.com" rel="noopener">Cerrion</a>, a Zurich-based
+      AI startup building video AI agents for manufacturing. Cerrion helps production teams detect
+      and respond to process, quality, and safety issues in real-time, straight from existing camera
+      feeds.
+    </p>
+
+    <p>
+      I believe perseverance is the key to overcoming any obstacle, whether it's learning a new
+      language, adapting to a new country, or diving into complex technical challenges. My journey
+      is one of continuous growth and unwavering determination.
+    </p>
+
+    <div class="cta">
+      <a href="/projects" class="btn">browse projects →</a>
+      <a href={SITE.social.github} rel="noopener" class="btn btn-ghost">github →</a>
+      <a href={SITE.social.linkedin} rel="me noopener" class="btn btn-linkedin">linkedin →</a>
+      <a href="/cv.txt" class="btn btn-cv">download cv →</a>
+    </div>
   </section>
 </BaseLayout>
 
 <style>
   .about { padding: 2rem 1.25rem 3rem; }
   .about h1 { margin-top: 0; }
-  .ascii {
-    color: var(--ctp-teal);
-    font-size: 0.82rem;
-    background: var(--bg-deep);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem 1.2rem;
+
+  .terminal {
     margin: 1.5rem 0;
+    border: 1px solid var(--ctp-teal);
+    border-radius: var(--radius);
+    background: var(--bg-deep);
+    color: var(--ctp-teal);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
   }
-  strong { color: var(--accent); font-weight: 600; }
+
+  .term-title {
+    padding: 0.35rem 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--ctp-teal) 35%, transparent);
+  }
+
+  .term-body {
+    margin: 0;
+    padding: 0.8rem 1.2rem;
+    background: transparent !important;
+    border: 0 !important;
+    color: inherit;
+    font-size: inherit;
+    line-height: 1.65;
+    overflow-x: auto;
+  }
+
+  .cta {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.55em 1.1em;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    transition: all 150ms ease;
+  }
+  .btn:hover {
+    background: color-mix(in srgb, var(--accent) 25%, transparent);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ctp-blue);
+    border-color: color-mix(in srgb, var(--ctp-blue) 40%, transparent);
+  }
+  .btn-ghost:hover {
+    color: var(--ctp-blue);
+    background: color-mix(in srgb, var(--ctp-blue) 12%, transparent);
+    border-color: var(--ctp-blue);
+  }
+
+  .btn-linkedin {
+    background: transparent;
+    color: var(--ctp-sapphire);
+    border-color: color-mix(in srgb, var(--ctp-sapphire) 40%, transparent);
+  }
+  .btn-linkedin:hover {
+    color: var(--ctp-sapphire);
+    background: color-mix(in srgb, var(--ctp-sapphire) 12%, transparent);
+    border-color: var(--ctp-sapphire);
+  }
+
+  .btn-cv {
+    background: transparent;
+    color: var(--ctp-peach);
+    border-color: color-mix(in srgb, var(--ctp-peach) 40%, transparent);
+  }
+  .btn-cv:hover {
+    color: var(--ctp-peach);
+    background: color-mix(in srgb, var(--ctp-peach) 12%, transparent);
+    border-color: var(--ctp-peach);
+  }
 </style>

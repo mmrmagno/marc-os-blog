@@ -7,13 +7,11 @@ const year = new Date().getFullYear();
   <div class="container-wide footer-inner">
     <div class="footer-left">
       <span class="dim">// {year} · {SITE.author}</span>
-      <span class="dim">·</span>
-      <a href="/rss.xml" class="footer-link">rss</a>
-      <span class="dim">·</span>
-      <a href="/sitemap-index.xml" class="footer-link">sitemap</a>
     </div>
     <div class="footer-right">
       <a href={SITE.social.github} rel="me noopener" class="footer-link">github</a>
+      <span class="dim">·</span>
+      <a href={SITE.social.linkedin} rel="me noopener" class="footer-link">linkedin</a>
       <span class="dim">·</span>
       <a href={SITE.social.email} class="footer-link">email</a>
     </div>

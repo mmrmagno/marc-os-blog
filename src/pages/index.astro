@@ -15,15 +15,15 @@ const featured = (await getCollection('projects', ({ data }) => !data.draft && d
 
 <BaseLayout>
   <section class="hero container">
-    <pre class="ascii" aria-hidden="true">
-{`┌─[ marc-os ]──────────────────────────────────┐
-│  $ whoami                                    │
-│  infra · devops · homelab operator           │
-│  $ uptime                                    │
-│  building things, breaking things, fixing    │
-│  them again. occasionally writing it down.   │
-└──────────────────────────────────────────────┘`}
-    </pre>
+    <div class="terminal" aria-hidden="true">
+      <div class="term-title">─[ marc-os ]</div>
+      <pre class="term-body">  $ whoami
+  infra · devops · homelab operator
+
+  $ uptime
+  building things, breaking things, fixing
+  them again. occasionally writing it down.</pre>
+    </div>
 
     <p class="lede">
       <span class="prompt">$</span> Welcome. I write about
@@ -35,6 +35,8 @@ const featured = (await getCollection('projects', ({ data }) => !data.draft && d
     <div class="cta">
       <a href="/blog" class="btn">read the blog →</a>
       <a href="/projects" class="btn btn-ghost">browse projects →</a>
+      <a href="/about" class="btn btn-about">about me →</a>
+      <a href="/cv.txt" class="btn btn-cv">download cv →</a>
     </div>
   </section>
 
@@ -83,16 +85,32 @@ const featured = (await getCollection('projects', ({ data }) => !data.draft && d
     padding-bottom: 2rem;
   }
 
-  .ascii {
+  .terminal {
     margin: 0 0 1.5rem;
-    padding: 0;
-    background: transparent;
-    border: 0;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--bg-deep);
     color: var(--accent);
-    font-size: 0.78rem;
-    line-height: 1.4;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+
+  .term-title {
+    padding: 0.35rem 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  .term-body {
+    margin: 0;
+    padding: 0.8rem 1.2rem;
+    background: transparent !important;
+    border: 0 !important;
+    color: inherit;
+    font-size: inherit;
+    line-height: 1.65;
+    text-shadow: inherit;
     overflow-x: auto;
-    text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 35%, transparent);
   }
 
   .lede {
@@ -137,6 +155,28 @@ const featured = (await getCollection('projects', ({ data }) => !data.draft && d
     color: var(--ctp-blue);
     background: color-mix(in srgb, var(--ctp-blue) 12%, transparent);
     border-color: var(--ctp-blue);
+  }
+
+  .btn-about {
+    background: transparent;
+    color: var(--ctp-mauve);
+    border-color: color-mix(in srgb, var(--ctp-mauve) 40%, transparent);
+  }
+  .btn-about:hover {
+    color: var(--ctp-mauve);
+    background: color-mix(in srgb, var(--ctp-mauve) 12%, transparent);
+    border-color: var(--ctp-mauve);
+  }
+
+  .btn-cv {
+    background: transparent;
+    color: var(--ctp-peach);
+    border-color: color-mix(in srgb, var(--ctp-peach) 40%, transparent);
+  }
+  .btn-cv:hover {
+    color: var(--ctp-peach);
+    background: color-mix(in srgb, var(--ctp-peach) 12%, transparent);
+    border-color: var(--ctp-peach);
   }
 
   .section { padding-top: 2.5rem; }

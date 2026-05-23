@@ -4,13 +4,13 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 
 <BaseLayout title="404 — not found" description="Page not found" noIndex>
   <section class="container notfound">
-    <pre class="ascii" aria-hidden="true">
-{`  ____   ___  _  _   
- |___ \\ / _ \\| || |  
-   __) | | | | || |_ 
-  / __/| |_| |__   _|
- |_____|\\___/   |_|  `}
-    </pre>
+    <div class="terminal">
+      <pre class="ascii" aria-hidden="true"> _  _    ___   _  _
+| || |  / _ \ | || |
+| || |_| | | || || |_
+|__   _|| |_| ||__   _|
+   |_|  \___/    |_|</pre>
+    </div>
     <h1>signal lost</h1>
     <p>the path <code>{Astro.url.pathname}</code> doesn't resolve.</p>
     <p><a href="/" class="btn">→ return home</a></p>
@@ -19,23 +19,39 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 
 <style>
   .notfound {
-    padding: 4rem 1.25rem;
+    padding: 3rem 1.25rem;
     text-align: center;
   }
-  .ascii {
-    color: var(--ctp-red);
+
+  .terminal {
     margin: 0 auto 1.5rem;
     display: inline-block;
     text-align: left;
-    background: transparent;
-    border: 0;
-    font-size: 0.95rem;
-    text-shadow: 0 0 14px color-mix(in srgb, var(--ctp-red) 35%, transparent);
+    border: 1px solid var(--ctp-red);
+    border-radius: var(--radius);
+    background: var(--bg-deep);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ctp-red) 40%, transparent));
   }
+
+  .ascii {
+    display: block;
+    margin: 0;
+    padding: 0.8rem 1.2rem !important;
+    background: transparent !important;
+    border: 0 !important;
+    color: var(--ctp-red);
+    font-size: inherit;
+    line-height: 1.4;
+    text-shadow: 0 0 10px color-mix(in srgb, var(--ctp-red) 30%, transparent);
+  }
+
   h1 {
     color: var(--ctp-red);
     margin: 0 0 0.6rem;
   }
+
   .btn {
     display: inline-block;
     margin-top: 1rem;
@@ -44,5 +60,10 @@ import BaseLayout from '@layouts/BaseLayout.astro';
     color: var(--accent);
     border: 1px solid var(--accent);
     border-radius: var(--radius);
+    transition: all 150ms ease;
+  }
+  .btn:hover {
+    background: color-mix(in srgb, var(--accent) 25%, transparent);
+    transform: translateY(-1px);
   }
 </style>

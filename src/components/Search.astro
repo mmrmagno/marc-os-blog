@@ -138,8 +138,9 @@
       if (pagefind || loading) return;
       loading = true;
       try {
-        // @ts-expect-error — Pagefind is loaded at runtime from a built path.
-        pagefind = (await import('/_pagefind/pagefind.js')) as PagefindModule;
+        // new Function prevents Vite from statically resolving this path.
+        // @ts-expect-error — runtime-only module built by pagefind CLI.
+        pagefind = (await new Function('p', 'return import(p)')('/_pagefind/pagefind.js')) as PagefindModule;
       } catch (err) {
         console.warn('search index not available yet — `pnpm build` first', err);
       } finally {

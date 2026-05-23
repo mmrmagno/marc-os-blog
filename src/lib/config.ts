@@ -8,7 +8,8 @@ export const SITE = {
   // Update these to your handles.
   social: {
     github: 'https://github.com/mmrmagno',
-    email: 'mailto:hello@marc-os.com',
+    linkedin: 'https://www.linkedin.com/in/marcos-magno-biriba-ribeiro-1ab200243/',
+    email: 'mailto:contact@marc-os.com',
   },
   nav: [
     { label: '~/', href: '/' },

@@ -22,6 +22,12 @@ body {
   min-height: 100dvh;
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
 }
 
 /* Page content sits above the matrix canvas */

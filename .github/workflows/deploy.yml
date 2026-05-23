@@ -17,21 +17,25 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: SSH and pull latest image
+      - name: SSH via bonfire → VPS and pull latest image
         uses: appleboy/ssh-action@v1.2.0
         with:
+          # Target VPS (only reachable through bonfire)
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          # ProxyJump through bonfire
+          proxy_host: ${{ secrets.BASTION_HOST }}
+          proxy_username: ${{ secrets.BASTION_USER }}
+          proxy_key: ${{ secrets.BASTION_SSH_KEY }}
+          proxy_port: ${{ secrets.BASTION_PORT }}
           script_stop: true
           script: |
             set -euo pipefail
-            cd ${{ secrets.DEPLOY_PATH || '/opt/marc-os-blog' }}
-            # Make sure we're on main and have the latest compose file.
+            cd ${{ secrets.DEPLOY_PATH }}
             git fetch --tags origin main
             git reset --hard origin/main
-            # Pull the new image and roll. Compose handles draining.
             docker compose pull
             docker compose up -d --remove-orphans
             docker image prune -f
