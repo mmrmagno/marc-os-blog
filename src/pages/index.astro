@@ -2,6 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostCard from '@components/PostCard.astro';
 import ProjectCard from '@components/ProjectCard.astro';
+import Terminal from '@components/Terminal.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -11,19 +12,18 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 const featured = (await getCollection('projects', ({ data }) => !data.draft && data.featured))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
+
+const heroTerminal = `  $ whoami
+  infra · devops · homelab
+
+  $ uptime
+  building things, breaking things, fixing
+  them again. occasionally writing it down.`;
 ---
 
 <BaseLayout>
   <section class="hero container">
-    <div class="terminal" aria-hidden="true">
-      <div class="term-title">─[ marc-os ]</div>
-      <pre class="term-body">  $ whoami
-  infra · devops · homelab operator
-
-  $ uptime
-  building things, breaking things, fixing
-  them again. occasionally writing it down.</pre>
-    </div>
+    <Terminal title="─[ marc-os ]" body={heroTerminal} />
 
     <p class="lede">
       <span class="prompt">$</span> Welcome. I write about
@@ -33,10 +33,10 @@ const featured = (await getCollection('projects', ({ data }) => !data.draft && d
     </p>
 
     <div class="cta">
-      <a href="/blog" class="btn">read the blog →</a>
-      <a href="/projects" class="btn btn-ghost">browse projects →</a>
-      <a href="/about" class="btn btn-about">about me →</a>
-      <a href="/cv.pdf" class="btn btn-cv">download cv →</a>
+      <a href="/blog" class="btn">Read The blog →</a>
+      <a href="/projects" class="btn btn-ghost">Browse Projects →</a>
+      <a href="/about" class="btn btn-about">About Me →</a>
+      <a href="/cv.pdf" class="btn btn-cv">Download CV →</a>
     </div>
   </section>
 
@@ -54,7 +54,7 @@ const featured = (await getCollection('projects', ({ data }) => !data.draft && d
           />
         ))}
       </div>
-      <p class="see-all"><a href="/blog">→ see all posts</a></p>
+      <p class="see-all"><a href="/blog">→ See All Posts</a></p>
     </section>
   )}
 
@@ -74,7 +74,7 @@ const featured = (await getCollection('projects', ({ data }) => !data.draft && d
           />
         ))}
       </div>
-      <p class="see-all"><a href="/projects">→ all projects</a></p>
+      <p class="see-all"><a href="/projects">→ All Projects</a></p>
     </section>
   )}
 </BaseLayout>
@@ -83,34 +83,6 @@ const featured = (await getCollection('projects', ({ data }) => !data.draft && d
   .hero {
     padding-top: 2.2rem;
     padding-bottom: 2rem;
-  }
-
-  .terminal {
-    margin: 0 0 1.5rem;
-    border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    background: var(--bg-deep);
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 30%, transparent);
-  }
-
-  .term-title {
-    padding: 0.35rem 1rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-  }
-
-  .term-body {
-    margin: 0;
-    padding: 0.8rem 1.2rem;
-    background: transparent !important;
-    border: 0 !important;
-    color: inherit;
-    font-size: inherit;
-    line-height: 1.65;
-    text-shadow: inherit;
-    overflow-x: auto;
   }
 
   .lede {

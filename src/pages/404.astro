@@ -1,19 +1,21 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+
+import Terminal from '@components/Terminal.astro';
+
+const notFoundTerminal = ` _  _    ___   _  _
+| || |  / _ \\ | || |
+| || |_| | | || || |_
+|__   _|| |_| ||__   _|
+   |_|  \\___/    |_|`;
 ---
 
 <BaseLayout title="404 — not found" description="Page not found" noIndex>
   <section class="container notfound">
-    <div class="terminal">
-      <pre class="ascii" aria-hidden="true"> _  _    ___   _  _
-| || |  / _ \ | || |
-| || |_| | | || || |_
-|__   _|| |_| ||__   _|
-   |_|  \___/    |_|</pre>
-    </div>
+    <Terminal title="─[ 404 ]" body={notFoundTerminal} tone="danger" compact />
     <h1>signal lost</h1>
     <p>the path <code>{Astro.url.pathname}</code> doesn't resolve.</p>
-    <p><a href="/" class="btn">→ return home</a></p>
+    <p><a href="/" class="btn">→ Return home</a></p>
   </section>
 </BaseLayout>
 
@@ -21,30 +23,6 @@ import BaseLayout from '@layouts/BaseLayout.astro';
   .notfound {
     padding: 3rem 1.25rem;
     text-align: center;
-  }
-
-  .terminal {
-    margin: 0 auto 1.5rem;
-    display: inline-block;
-    text-align: left;
-    border: 1px solid var(--ctp-red);
-    border-radius: var(--radius);
-    background: var(--bg-deep);
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ctp-red) 40%, transparent));
-  }
-
-  .ascii {
-    display: block;
-    margin: 0;
-    padding: 0.8rem 1.2rem !important;
-    background: transparent !important;
-    border: 0 !important;
-    color: var(--ctp-red);
-    font-size: inherit;
-    line-height: 1.4;
-    text-shadow: 0 0 10px color-mix(in srgb, var(--ctp-red) 30%, transparent);
   }
 
   h1 {
@@ -56,14 +34,15 @@ import BaseLayout from '@layouts/BaseLayout.astro';
     display: inline-block;
     margin-top: 1rem;
     padding: 0.55em 1.1em;
-    background: color-mix(in srgb, var(--accent) 14%, transparent);
-    color: var(--accent);
-    border: 1px solid var(--accent);
+    background: color-mix(in srgb, var(--ctp-red) 14%, transparent);
+    color: var(--ctp-red);
+    border: 1px solid color-mix(in srgb, var(--ctp-red) 50%, transparent);
     border-radius: var(--radius);
     transition: all 150ms ease;
   }
   .btn:hover {
-    background: color-mix(in srgb, var(--accent) 25%, transparent);
+    background: color-mix(in srgb, var(--ctp-red) 25%, transparent);
+    border-color: var(--ctp-red);
     transform: translateY(-1px);
   }
 </style>

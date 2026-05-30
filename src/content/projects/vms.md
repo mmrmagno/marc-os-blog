@@ -4,7 +4,7 @@ description: "A modern web-based visitor management system built with FastAPI an
 pubDate: 2024-01-01
 tags: ["python", "fastapi", "postgresql", "web"]
 repo: "https://github.com/mmrmagno/vms"
-status: "active"
+status: "archived"
 featured: false
 draft: false
 ---

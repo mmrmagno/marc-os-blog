@@ -1,20 +1,20 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import Terminal from '@components/Terminal.astro';
 import { SITE } from '@lib/config';
+
+const aboutTerminal = `  name     : Marcos Magno Biriba Ribeiro (Marc)
+  born     : 2005-01-18, São Paulo, Brazil
+  based    : Switzerland
+  role     : infra/devops @ cerrion
+  contact  : contact@marc-os.com`;
 ---
 
 <BaseLayout title="about" description={`About ${SITE.author}`}>
   <section class="container about">
     <h1># about</h1>
 
-    <div class="terminal" aria-hidden="true">
-      <div class="term-title">─[ marc@marc-os ]</div>
-      <pre class="term-body">  name     : Marcos Magno Biriba Ribeiro (Marc)
-  born     : 2005-01-18, São Paulo, Brazil
-  based    : Switzerland
-  role     : infra/devops @ cerrion
-  contact  : contact@marc-os.com</pre>
-    </div>
+    <Terminal title="─[ about ]" body={aboutTerminal} />
 
     <p>
       Hello, my name is Marcos Magno Biriba Ribeiro, though I usually go by Marcos Magno (or Marc).
@@ -64,10 +64,10 @@ import { SITE } from '@lib/config';
     </p>
 
     <div class="cta">
-      <a href="/projects" class="btn">browse projects →</a>
-      <a href={SITE.social.github} rel="noopener" class="btn btn-ghost">github →</a>
-      <a href={SITE.social.linkedin} rel="me noopener" class="btn btn-linkedin">linkedin →</a>
-      <a href="/cv.pdf" class="btn btn-cv">download cv →</a>
+      <a href="/projects" class="btn">Browse Projects →</a>
+      <a href={SITE.social.github} rel="noopener" class="btn btn-ghost">GitHub →</a>
+      <a href={SITE.social.linkedin} rel="me noopener" class="btn btn-linkedin">LinkedIn →</a>
+      <a href="/cv.pdf" class="btn btn-cv">Download CV →</a>
     </div>
   </section>
 </BaseLayout>
@@ -75,32 +75,6 @@ import { SITE } from '@lib/config';
 <style>
   .about { padding: 2rem 1.25rem 3rem; }
   .about h1 { margin-top: 0; }
-
-  .terminal {
-    margin: 1.5rem 0;
-    border: 1px solid var(--ctp-teal);
-    border-radius: var(--radius);
-    background: var(--bg-deep);
-    color: var(--ctp-teal);
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-  }
-
-  .term-title {
-    padding: 0.35rem 1rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--ctp-teal) 35%, transparent);
-  }
-
-  .term-body {
-    margin: 0;
-    padding: 0.8rem 1.2rem;
-    background: transparent !important;
-    border: 0 !important;
-    color: inherit;
-    font-size: inherit;
-    line-height: 1.65;
-    overflow-x: auto;
-  }
 
   .cta {
     display: flex;

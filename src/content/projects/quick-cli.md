@@ -4,7 +4,7 @@ description: "A Rust-powered CLI tool that streamlines the management of QuickEM
 pubDate: 2024-01-01
 tags: ["rust", "cli", "quickemu", "virtualization"]
 repo: "https://github.com/mmrmagno/quick-cli"
-status: "active"
+status: "archived"
 featured: false
 draft: false
 ---

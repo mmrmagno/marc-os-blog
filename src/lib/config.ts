@@ -1,6 +1,6 @@
 export const SITE = {
   title: 'marc-os',
-  tagline: 'infra & devops · writing things down',
+  tagline: 'infra, devops, and homelab notes',
   description:
     'Notes on infrastructure, devops, homelab, and whatever else I happen to be debugging at 2am.',
   author: 'Marc',

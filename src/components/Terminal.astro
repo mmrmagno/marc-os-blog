@@ -1,0 +1,76 @@
+---
+interface Props {
+  title: string;
+  body: string;
+  tone?: 'accent' | 'danger';
+  compact?: boolean;
+  ariaHidden?: boolean;
+  class?: string;
+}
+
+const {
+  title,
+  body,
+  tone = 'accent',
+  compact = false,
+  ariaHidden = true,
+  class: className = '',
+} = Astro.props;
+
+const classes = [
+  'terminal',
+  tone === 'danger' && 'terminal-danger',
+  compact && 'terminal-compact',
+  className,
+].filter(Boolean);
+---
+
+<div class:list={classes} aria-hidden={ariaHidden ? 'true' : undefined}>
+  <div class="term-title">{title}</div>
+  <pre class="term-body">{body}</pre>
+</div>
+
+<style>
+  .terminal {
+    --terminal-accent: var(--accent);
+
+    margin: 0 0 1.5rem;
+    border: 1px solid var(--terminal-accent);
+    border-radius: var(--radius);
+    background: var(--bg-deep);
+    color: var(--terminal-accent);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    text-align: left;
+    text-shadow: 0 0 10px color-mix(in srgb, var(--terminal-accent) 30%, transparent);
+    overflow: hidden;
+  }
+
+  .terminal-danger {
+    --terminal-accent: var(--ctp-red);
+  }
+
+  .terminal-compact {
+    display: inline-block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .term-title {
+    padding: 0.35rem 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--terminal-accent) 35%, transparent);
+  }
+
+  .term-body {
+    display: block;
+    margin: 0;
+    padding: 0.8rem 1.2rem;
+    background: transparent !important;
+    border: 0 !important;
+    color: inherit;
+    font-size: inherit;
+    line-height: 1.65;
+    text-shadow: inherit;
+    overflow-x: auto;
+  }
+</style>
