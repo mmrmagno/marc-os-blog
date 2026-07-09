@@ -18,7 +18,7 @@ jobs:
     environment: production
     steps:
       - name: SSH via bonfire → VPS and pull latest image
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@v1.2.5
         with:
           # Target VPS (only reachable through bonfire)
           host: ${{ secrets.DEPLOY_HOST }}
