@@ -5,7 +5,10 @@ import { getCollection } from 'astro:content';
 
 const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => {
   if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
-  return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+  return (
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf() ||
+    a.data.title.localeCompare(b.data.title)
+  );
 });
 ---
 
