@@ -23,3 +23,6 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    groups:
+      actions:
+        patterns: ["*"]
