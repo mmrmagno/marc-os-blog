@@ -1,11 +1,11 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import PostLayout from '@layouts/PostLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: post,
   }));
 }
@@ -13,10 +13,10 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 
 // Astro v5 exposes reading time only if you add a plugin; we'll estimate.
-const wordCount = post.body.trim().split(/\s+/).length;
+const wordCount = (post.body ?? '').trim().split(/\s+/).length;
 const minutesRead = Math.max(1, Math.round(wordCount / 220));
 ---
 

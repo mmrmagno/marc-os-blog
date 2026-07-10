@@ -11,6 +11,10 @@ updates:
         patterns: ["astro", "@astrojs/*"]
       dev-deps:
         dependency-type: development
+    ignore:
+      # @astrojs/check only supports typescript ^5 || ^6 so far.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: docker
     directory: "/"

@@ -24,7 +24,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
         <ProjectCard
           title={p.data.title}
           description={p.data.description}
-          href={`/projects/${p.slug}`}
+          href={`/projects/${p.id}`}
           repo={p.data.repo}
           url={p.data.url}
           status={p.data.status}
