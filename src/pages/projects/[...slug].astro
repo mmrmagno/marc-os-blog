@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Tag from '@components/Tag.astro';
 import FormattedDate from '@components/FormattedDate.astro';
@@ -7,14 +7,14 @@ import FormattedDate from '@components/FormattedDate.astro';
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ data }) => !data.draft);
   return projects.map((p) => ({
-    params: { slug: p.slug },
+    params: { slug: p.id },
     props: p,
   }));
 }
 
 type Props = CollectionEntry<'projects'>;
 const project = Astro.props;
-const { Content } = await project.render();
+const { Content } = await render(project);
 
 const statusLabel: Record<string, string> = {
   active: '● active',

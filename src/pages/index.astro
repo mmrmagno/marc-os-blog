@@ -46,7 +46,7 @@ const heroTerminal = `  $ whoami
       <div class="list">
         {posts.map((p) => (
           <PostCard
-            href={`/blog/${p.slug}`}
+            href={`/blog/${p.id}`}
             title={p.data.title}
             description={p.data.description}
             pubDate={p.data.pubDate}
@@ -66,7 +66,7 @@ const heroTerminal = `  $ whoami
           <ProjectCard
             title={p.data.title}
             description={p.data.description}
-            href={`/projects/${p.slug}`}
+            href={`/projects/${p.id}`}
             repo={p.data.repo}
             url={p.data.url}
             status={p.data.status}

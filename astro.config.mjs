@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { unified } from '@astrojs/markdown-remark';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 
@@ -22,17 +23,21 @@ export default defineConfig({
       theme: 'catppuccin-mocha',
       wrap: true,
     },
-    rehypePlugins: [
-      rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: 'append',
-          properties: { className: ['heading-anchor'], ariaLabel: 'Permalink' },
-          content: { type: 'text', value: ' #' },
-        },
+    // Astro 7 defaults to the Sätteri processor, which has its own plugin
+    // model and cannot run rehype plugins. Keep the unified pipeline.
+    processor: unified({
+      rehypePlugins: [
+        rehypeSlug,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: 'append',
+            properties: { className: ['heading-anchor'], ariaLabel: 'Permalink' },
+            content: { type: 'text', value: ' #' },
+          },
+        ],
       ],
-    ],
+    }),
   },
   vite: {
     build: {
