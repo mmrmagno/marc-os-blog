@@ -11,7 +11,7 @@ on:
 # Don't let two pushes race the registry.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   REGISTRY: ghcr.io
@@ -184,3 +184,32 @@ jobs:
 
       - name: Inspect manifest
         run: docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+
+  deploy:
+    name: notify deploy webhook
+    needs: manifest
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Signed POST to deploy webhook
+        env:
+          URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+          SECRET: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${URL:-}" ] || [ -z "${SECRET:-}" ]; then
+            echo "DEPLOY_WEBHOOK_URL / DEPLOY_WEBHOOK_SECRET not set, skipping deploy notify."
+            exit 0
+          fi
+          body="$(printf '{"app":"marc-os-blog","ref":"%s","sha":"%s"}' "$GITHUB_REF_NAME" "$GITHUB_SHA")"
+          sig="sha256=$(printf '%s' "$body" | openssl dgst -sha256 -hmac "$SECRET" | awk '{print $2}')"
+          code="$(curl -sS -o /tmp/resp -w '%{http_code}' -X POST "$URL" \
+            -H 'Content-Type: application/json' \
+            -H "X-Hub-Signature-256: $sig" \
+            --data "$body")"
+          echo "webhook HTTP $code"
+          if [ "$code" = "200" ]; then
+            tail -n 1 /tmp/resp
+          fi
+          [ "$code" = "200" ]

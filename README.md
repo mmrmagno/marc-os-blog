@@ -65,14 +65,25 @@ docker compose up -d
 ```
 
 CI builds and pushes `ghcr.io/mmrmagno/marc-os-blog:latest` on every push
-to `main`. To redeploy after a CI build:
+to `main`, then sends an HMAC-signed POST to a
+[webhook](https://github.com/adnanh/webhook) listener on the server. The
+listener checks the `X-Hub-Signature-256` header and runs
+`scripts/deploy.sh`, which pulls the new image, restarts the container and
+waits for `/healthz`. No SSH access from CI is needed.
+
+To enable it:
+
+1. Add the entry from `infra/webhook-hook.json.example` to the listener's
+   `hooks.json`, with a random secret.
+2. Set the repository secrets `DEPLOY_WEBHOOK_URL` and
+   `DEPLOY_WEBHOOK_SECRET` (same value as in `hooks.json`).
+
+The deploy script only pulls images. Changes to `docker-compose.yml` or
+`scripts/` need a manual `git pull` on the server. To redeploy by hand:
 
 ```bash
-docker compose pull && docker compose up -d
+./scripts/deploy.sh
 ```
-
-The included `.github/workflows/deploy.yml` does this over SSH on each
-green build.
 
 ## Repository layout
 
