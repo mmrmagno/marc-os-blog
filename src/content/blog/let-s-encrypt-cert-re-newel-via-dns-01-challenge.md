@@ -1,8 +1,8 @@
 ---
-title: "Let’s Encrypt Cert Re-newel via DNS-01-Challenge"
+title: "Let’s Encrypt Cert Renewal via DNS-01-Challenge"
 description: "This guide explains how to switch from HTTP-01 to DNS-01 ACME challenges, so you can automate certificate issuance for any service (web servers, mail servers, and more) without exposing port 80."
 pubDate: 2025-05-16
-tags: []
+tags: ["letsencrypt", "acme", "dns", "tls"]
 draft: false
 ---
 

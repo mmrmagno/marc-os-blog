@@ -2,7 +2,7 @@
 title: "Hello World!"
 description: "Testing my md rendering tool to make posts!"
 pubDate: 2025-03-27
-tags: []
+tags: ["meta", "markdown"]
 draft: false
 ---
 

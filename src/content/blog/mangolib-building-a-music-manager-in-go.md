@@ -13,9 +13,9 @@ Managing a growing music library across multiple sources, devices, and formats g
 
 ## What it does
 
-mangolib handles the full lifecycle of a local music library. Spotify downloads use the Spotify Web API for authoritative metadata and then search YouTube for the audio via yt-dlp. YouTube downloads work for single videos or full playlists, with per-track progress bars and automatic title cleaning channel prefixes and noise like `(Official Video)` are stripped on every download.
+mangolib handles the full lifecycle of a local music library. Spotify downloads use the Spotify Web API for authoritative metadata and then search YouTube for the audio via yt-dlp. YouTube downloads work for single videos or full playlists, with per-track progress bars and automatic title cleaning: channel prefixes and noise like `(Official Video)` are stripped on every download.
 
-Files are tagged natively (ID3v2 for MP3, ffmpeg for M4A and FLAC), organized into `Artist/Album/NN. Title.ext`, and synced to the iPod via rsync. The sync is bidirectional `--from-ipod` pulls music back from the device and reorganizes it automatically.
+Files are tagged natively (ID3v2 for MP3, ffmpeg for M4A and FLAC), organized into `Artist/Album/NN. Title.ext`, and synced to the iPod via rsync. The sync is bidirectional: `--from-ipod` pulls music back from the device and reorganizes it automatically.
 
 Cover art is fetched from iTunes at 3000×3000 with MusicBrainz as fallback. It gets embedded in the tags and also written as a `cover.jpg` per album folder, since Rockbox reads cover art from the filesystem rather than embedded ID3 tags.
 

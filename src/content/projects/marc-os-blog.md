@@ -22,4 +22,4 @@ this page is the dev diary.
 
 - a `/now` page
 - webmentions (statically rendered from a brid.gy export)
-- a search index built at compile time (pagefind — done)
+- a search index built at compile time (pagefind, done)

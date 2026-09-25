@@ -2,7 +2,7 @@
 title: "Building VALART: A Tool for creating ASCII Art"
 description: "Introducing VALART, a tool that lets Valorant players effortlessly create and share ASCII art in the in-game chat."
 pubDate: 2025-05-20
-tags: []
+tags: ["react", "typescript", "ascii-art", "valorant"]
 draft: false
 ---
 
