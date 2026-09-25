@@ -28,8 +28,8 @@ const slug = Astro.url.pathname.replace(/\/$/, '').split('/').pop();
 ---
 
 <BaseLayout title={title} description={description} type="article" pubDate={pubDate} image={image}>
-  <div class="desktop">
-    <Window title={`nvim ~/blog/${slug}.md`}>
+  <div class="desktop desktop-float">
+    <Window title={`nvim ~/blog/${slug}/${slug}.md`}>
       <article class="post measure">
         <header class="post-header">
           <a href="/blog" class="back-link">← back to /blog</a>

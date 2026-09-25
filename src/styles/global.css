@@ -199,6 +199,10 @@ h4:hover .heading-anchor {
   padding: var(--gap-out);
 }
 
+.desktop-float {
+  max-width: calc(var(--measure) + 14rem + 2 * var(--gap-out) + 2 * var(--border-w));
+}
+
 .measure {
   max-width: var(--measure);
   margin-inline: auto;

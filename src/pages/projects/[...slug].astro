@@ -20,8 +20,8 @@ const { Content } = await render(project);
 ---
 
 <BaseLayout title={project.data.title} description={project.data.description}>
-  <div class="desktop">
-    <Window title={`cat ~/projects/${project.id}.md`}>
+  <div class="desktop desktop-float">
+    <Window title={`cat ~/projects/${project.id}/${project.id}.md`}>
       <article class="project measure">
         <header class="proj-header">
           <a href="/projects" class="back-link">← back to /projects</a>
