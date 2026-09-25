@@ -16,7 +16,3 @@ scripts
 .vscode
 .idea
 *.log
-mongodb/
-migration-backup/
-legacy/
-dumps/
