@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
-
 import Terminal from '@components/Terminal.astro';
+import Window from '@components/Window.astro';
 
 const notFoundTerminal = ` _  _    ___   _  _
 | || |  / _ \\ | || |
@@ -10,39 +10,43 @@ const notFoundTerminal = ` _  _    ___   _  _
    |_|  \\___/    |_|`;
 ---
 
-<BaseLayout title="404 — not found" description="Page not found" noIndex>
-  <section class="container notfound">
-    <Terminal title="─[ 404 ]" body={notFoundTerminal} tone="danger" compact />
-    <h1>signal lost</h1>
-    <p>the path <code>{Astro.url.pathname}</code> doesn't resolve.</p>
-    <p><a href="/" class="btn">→ Return home</a></p>
-  </section>
+<BaseLayout title="404: not found" description="Page not found" noIndex>
+  <div class="desktop">
+    <Window title="zsh: no such file or directory" variant="danger">
+      <section class="notfound">
+        <Terminal body={notFoundTerminal} tone="danger" compact />
+        <h1>signal lost</h1>
+        <p class="fallen">ironclad has fallen. floor 404.</p>
+        <p>the path <code id="missing-path">{Astro.url.pathname}</code> doesn't resolve.</p>
+        <p><a href="/" class="btn btn-red">Return home</a></p>
+      </section>
+    </Window>
+  </div>
 </BaseLayout>
 
 <style>
   .notfound {
-    padding: 3rem 1.25rem;
+    padding: 1.5rem 0;
     text-align: center;
   }
 
   h1 {
     color: var(--ctp-red);
-    margin: 0 0 0.6rem;
+    margin: 0 0 0.4rem;
   }
 
-  .btn {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.55em 1.1em;
-    background: color-mix(in srgb, var(--ctp-red) 14%, transparent);
-    color: var(--ctp-red);
-    border: 1px solid color-mix(in srgb, var(--ctp-red) 50%, transparent);
-    border-radius: var(--radius);
-    transition: all 150ms ease;
+  .fallen {
+    color: var(--ctp-maroon);
+    margin-bottom: 1.4rem;
   }
-  .btn:hover {
-    background: color-mix(in srgb, var(--ctp-red) 25%, transparent);
-    border-color: var(--ctp-red);
-    transform: translateY(-1px);
-  }
+
+  .btn { margin-top: 0.6rem; }
 </style>
+
+<script>
+  const path = window.location.pathname;
+  const code = document.getElementById('missing-path');
+  if (code) code.textContent = path;
+  const cwd = document.querySelector('.brand .cwd');
+  if (cwd) cwd.textContent = `~${path.replace(/\/$/, '')}`;
+</script>

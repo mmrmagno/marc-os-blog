@@ -21,14 +21,14 @@ const yamlString = (s) =>
 let written = 0, skipped = 0;
 for (const p of posts) {
   const title = p.title ?? '(untitled)';
-  // No slug field in schema — derive from title
+  // No slug field in schema, derive from title
   const slug = slugify(title);
   // excerpt maps to description (cap at 280 chars per schema)
   const description = (p.excerpt ?? '').slice(0, 280);
   const pubDate = new Date(p.createdAt ?? Date.now()).toISOString().slice(0, 10);
-  // No tags field in old schema — default empty
+  // No tags field in old schema, default empty
   const tags = [];
-  // No draft/published field — default published
+  // No draft/published field, default published
   const draft = false;
   const body = p.content ?? '';
 

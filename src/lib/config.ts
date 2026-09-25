@@ -18,3 +18,14 @@ export const SITE = {
     { label: 'about', href: '/about' },
   ],
 } as const;
+
+export const SPLASHES = [
+  "still debugging, it's 2am somewhere",
+  'one more run, then sleep',
+  "it's not a bug, it's a relic",
+  "it was dns. it's always dns.",
+  'exit code 0, somehow',
+  'uptime is a lifestyle',
+  'sudo !!',
+  "reading logs so you don't have to",
+] as const;

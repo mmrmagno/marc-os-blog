@@ -1,0 +1,42 @@
+---
+interface Props {
+  status: 'active' | 'maintained' | 'archived' | 'wip';
+}
+
+const { status } = Astro.props;
+const spinning = status === 'active' || status === 'wip';
+const glyph = status === 'maintained' ? '●' : '○';
+---
+
+<span class={`status status-${status}`}>
+  {spinning ? <span class="spin" aria-hidden="true" /> : <span class="glyph" aria-hidden="true">{glyph}</span>}
+  {status}
+</span>
+
+<style>
+  .status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .spin,
+  .glyph {
+    display: inline-block;
+    width: 1ch;
+    margin-right: 0.3em;
+    text-align: center;
+  }
+
+  .spin::before {
+    content: '|';
+    animation: throb 0.8s steps(1) infinite;
+  }
+
+  @keyframes throb {
+    0% { content: '|'; }
+    25% { content: '/'; }
+    50% { content: '-'; }
+    75% { content: '\\'; }
+  }
+</style>

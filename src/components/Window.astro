@@ -1,0 +1,92 @@
+---
+interface Props {
+  title: string;
+  variant?: 'default' | 'danger';
+  class?: string;
+}
+
+const { title, variant = 'default', class: className = '' } = Astro.props;
+---
+
+<section class:list={['window', variant === 'danger' && 'window-danger', className]}>
+  <div class="window-title"><span class="bracket">[</span> <span class="cmd">{title}</span> <span class="bracket">]</span></div>
+  <div class="window-body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .window {
+    position: relative;
+    border-radius: var(--radius);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(1.2);
+    backdrop-filter: blur(var(--blur)) saturate(1.2);
+    min-width: 0;
+  }
+
+  .window::before,
+  .window::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--border-w);
+    pointer-events: none;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  .window::before { background: var(--border-inactive); }
+
+  .window::after {
+    background: var(--border-active);
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .window:hover::after,
+  .window:focus-within::after { opacity: 1; }
+
+  .window-danger::before {
+    background: linear-gradient(45deg, #f38ba8cc, #6c7086cc);
+  }
+  .window-danger::after {
+    background: linear-gradient(45deg, #f38ba8, #eba0ac);
+  }
+
+  .window-title {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    max-width: calc(100% - 32px);
+    transform: translateY(-50%);
+    padding: 0 0.45em;
+    background: var(--ctp-crust);
+    border-radius: 4px;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 1;
+    transition: color 180ms ease;
+  }
+
+  .bracket { color: var(--ctp-overlay0); }
+
+  .window:hover .cmd,
+  .window:focus-within .cmd { color: var(--ctp-mauve); }
+  .window-danger .cmd { color: var(--ctp-red); }
+
+  .window-body {
+    padding: 1.6rem 1.5rem 1.4rem;
+  }
+
+  @media (max-width: 560px) {
+    .window-body { padding: 1.4rem 1rem 1.1rem; }
+  }
+</style>

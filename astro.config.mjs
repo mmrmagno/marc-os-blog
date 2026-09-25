@@ -18,6 +18,7 @@ export default defineConfig({
   },
   integrations: [sitemap()],
   markdown: {
+    smartypants: false,
     shikiConfig: {
       // Catppuccin Mocha is built into Shiki.
       theme: 'catppuccin-mocha',

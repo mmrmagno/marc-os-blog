@@ -31,7 +31,7 @@
     gap: 0.6rem;
     background: var(--bg-deep);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     padding: 0.6em 0.9em;
     transition: border-color 150ms ease, box-shadow 150ms ease;
   }
@@ -42,7 +42,7 @@
   }
 
   .search-box .prompt {
-    color: var(--accent);
+    color: var(--prompt);
     font-weight: 600;
   }
 
@@ -78,7 +78,7 @@
     padding: 0.7em 0.9em;
     background: color-mix(in srgb, var(--bg-elevated) 60%, transparent);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     transition: border-color 120ms ease;
   }
   .results :global(.r-item:hover) {
@@ -112,7 +112,7 @@
 </style>
 
 <script>
-  // Pagefind is loaded lazily — only when the user actually focuses the input.
+  // Pagefind is loaded lazily, only when the user actually focuses the input.
   // Keeps the initial page weight tiny.
   type PagefindResult = {
     id: string;
@@ -141,7 +141,7 @@
         // new Function prevents Vite from statically resolving this path.
         pagefind = (await new Function('p', 'return import(p)')('/_pagefind/pagefind.js')) as PagefindModule;
       } catch (err) {
-        console.warn('search index not available yet — `pnpm build` first', err);
+        console.warn('search index not available yet, run `pnpm build` first', err);
       } finally {
         loading = false;
       }

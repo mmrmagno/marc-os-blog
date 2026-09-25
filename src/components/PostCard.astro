@@ -13,74 +13,83 @@ interface Props {
 const { href, title, description, pubDate, tags = [] } = Astro.props;
 ---
 
-<article class="card">
-  <a href={href} class="card-link" aria-label={title}>
-    <header class="card-head">
-      <FormattedDate date={pubDate} />
+<article class="row">
+  <FormattedDate date={pubDate} class="row-date" />
+  <div class="row-main">
+    <a href={href} class="row-link">
       <h2>{title}</h2>
-    </header>
-    <p class="desc">{description}</p>
-  </a>
-  {tags.length > 0 && (
-    <div class="tags">
-      {tags.map((t) => <Tag tag={t} />)}
-    </div>
-  )}
+      <p class="desc">{description}</p>
+    </a>
+    {tags.length > 0 && (
+      <div class="tags">
+        {tags.map((t) => <Tag tag={t} />)}
+      </div>
+    )}
+  </div>
 </article>
 
 <style>
-  .card {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.1rem 1.2rem;
-    background: color-mix(in srgb, var(--bg-elevated) 50%, transparent);
-    transition: border-color 150ms ease, transform 150ms ease, background 150ms ease;
+  .row {
+    display: grid;
+    grid-template-columns: 7.5em minmax(0, 1fr);
+    gap: 0.2rem 1rem;
+    padding: 0.7rem 0.75rem;
+    margin: 0 -0.75rem;
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: background 120ms ease;
   }
 
-  .card:hover {
-    border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
-    background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
+  .row + .row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0.75rem;
+    right: 0.75rem;
+    border-top: 1px dashed var(--ctp-surface1);
   }
 
-  .card-link {
+  .row:hover,
+  .row:focus-within {
+    background: color-mix(in srgb, var(--ctp-surface0) 55%, transparent);
+  }
+
+  .row :global(.row-date) { padding-top: 0.15em; }
+
+  .row-link {
     display: block;
     color: inherit;
     border: 0;
   }
+  .row-link:hover { color: inherit; }
 
-  .card-link:hover { color: inherit; }
-
-  .card-head {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .card h2 {
-    margin: 0;
-    font-size: 1.1rem;
+  .row h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
     color: var(--text);
-    transition: color 150ms ease;
+    transition: color 120ms ease;
   }
-
-  .card:hover h2 { color: var(--accent); }
-
-  .card h2::before {
+  .row h2::before {
     content: '$ ';
-    color: var(--ctp-overlay1);
+    color: var(--prompt);
   }
+  .row-link:hover h2,
+  .row-link:focus-visible h2 { color: var(--accent); }
 
   .desc {
     margin: 0;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
   }
 
   .tags {
-    margin-top: 0.75rem;
+    margin-top: 0.4rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.2rem 0.8rem;
+  }
+
+  @media (max-width: 560px) {
+    .row { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

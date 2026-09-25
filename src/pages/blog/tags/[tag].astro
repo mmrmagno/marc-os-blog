@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostCard from '@components/PostCard.astro';
+import Window from '@components/Window.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -23,32 +24,33 @@ const { tag, posts } = Astro.props;
 ---
 
 <BaseLayout title={`#${tag}`} description={`Posts tagged #${tag}`}>
-  <section class="container tagpage">
-    <header class="page-header">
-      <a href="/blog" class="back">← back to /blog</a>
-      <h1># {tag}</h1>
-      <p class="dim">{posts.length} post{posts.length === 1 ? '' : 's'}</p>
-    </header>
-    <div class="list">
-      {posts.map((p) => (
-        <PostCard
-          href={`/blog/${p.id}`}
-          title={p.data.title}
-          description={p.data.description}
-          pubDate={p.data.pubDate}
-          tags={p.data.tags}
-        />
-      ))}
-    </div>
-  </section>
+  <div class="desktop">
+    <Window title={`grep -l '#${tag}' ~/blog/*`}>
+      <section class="tagpage measure">
+        <header class="page-header">
+          <a href="/blog" class="back-link">← back to /blog</a>
+          <h1># {tag}</h1>
+          <p class="dim">{posts.length} post{posts.length === 1 ? '' : 's'}</p>
+        </header>
+        <div class="list">
+          {posts.map((p) => (
+            <PostCard
+              href={`/blog/${p.id}`}
+              title={p.data.title}
+              description={p.data.description}
+              pubDate={p.data.pubDate}
+              tags={p.data.tags}
+            />
+          ))}
+        </div>
+      </section>
+    </Window>
+  </div>
 </BaseLayout>
 
 <style>
-  .tagpage { padding: 2rem 1.25rem 3rem; }
   .page-header { margin-bottom: 1.6rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border); }
-  .page-header h1 { margin: 0.6rem 0 0.3rem; color: var(--ctp-teal); }
+  .page-header h1 { margin: 0.6rem 0 0.3rem; color: var(--ctp-teal); font-size: 1.7rem; }
   .dim { color: var(--text-dim); font-size: 0.85rem; margin: 0; }
-  .back { font-size: 0.82rem; color: var(--text-dim); border: 0; }
-  .back:hover { color: var(--accent); }
-  .list { display: flex; flex-direction: column; gap: 0.85rem; }
+  .list { display: flex; flex-direction: column; gap: 0.1rem; }
 </style>

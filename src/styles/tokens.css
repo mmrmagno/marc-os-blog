@@ -1,4 +1,4 @@
-/* Catppuccin Mocha — https://catppuccin.com/palette */
+/* Catppuccin Mocha: https://catppuccin.com/palette */
 :root {
   --ctp-rosewater: #f5e0dc;
   --ctp-flamingo: #f2cdcd;
@@ -39,20 +39,33 @@
   --text-muted: var(--ctp-subtext0);
   --text-dim: var(--ctp-overlay1);
 
-  --accent: var(--ctp-green);        /* matrix green is the spine */
-  --accent-alt: var(--ctp-teal);
-  --link: var(--ctp-mauve);
-  --link-hover: var(--ctp-lavender);
+  --accent: var(--ctp-mauve);
+  --accent-alt: var(--ctp-rosewater);
+  --link: var(--ctp-lavender);
+  --link-hover: var(--ctp-rosewater);
+  --prompt: var(--ctp-green);
+
+  --border-active: linear-gradient(45deg, #ca9ee6, #f2d5cf);
+  --border-inactive: linear-gradient(45deg, #b4befecc, #6c7086cc);
+  --glass: color-mix(in srgb, var(--ctp-mantle) 72%, transparent);
+  --blur: 12px;
+  --bar-bg: color-mix(in srgb, var(--ctp-crust) 82%, transparent);
+  --ws-active: var(--ctp-subtext0);
 
   /* Typography */
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular,
     'Cascadia Mono', Menlo, Consolas, monospace;
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Layout */
   --max-w: 760px;
   --max-w-wide: 1100px;
-  --radius: 6px;
+  --max-w-desktop: 1920px;
+  --measure: 72ch;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --border-w: 2px;
+  --gap-in: 6px;
+  --gap-out: 8px;
 
   color-scheme: dark;
 }

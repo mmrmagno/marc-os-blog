@@ -2,6 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostCard from '@components/PostCard.astro';
 import Search from '@components/Search.astro';
+import Window from '@components/Window.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
@@ -19,44 +20,46 @@ const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
 ---
 
 <BaseLayout title="blog" description="Writing about infrastructure, devops, and homelab adventures.">
-  <section class="container blog-index">
-    <header class="page-header">
-      <h1>blog</h1>
-      <p class="dim">{posts.length} post{posts.length === 1 ? '' : 's'} · sorted newest first</p>
-    </header>
+  <div class="desktop">
+    <Window title="ls ~/blog">
+      <section class="blog-index measure">
+        <header class="page-header">
+          <h1>blog</h1>
+          <p class="dim">{posts.length} post{posts.length === 1 ? '' : 's'} · sorted newest first</p>
+        </header>
 
-    <Search />
+        <Search />
 
-    {years.map((year) => (
-      <section class="year">
-        <h2 class="year-title">## {year}</h2>
-        <div class="list">
-          {byYear[year].map((p) => (
-            <PostCard
-              href={`/blog/${p.id}`}
-              title={p.data.title}
-              description={p.data.description}
-              pubDate={p.data.pubDate}
-              tags={p.data.tags}
-            />
-          ))}
-        </div>
+        {years.map((year) => (
+          <section class="year">
+            <h2 class="year-title">## {year}</h2>
+            <div class="list">
+              {byYear[year].map((p) => (
+                <PostCard
+                  href={`/blog/${p.id}`}
+                  title={p.data.title}
+                  description={p.data.description}
+                  pubDate={p.data.pubDate}
+                  tags={p.data.tags}
+                />
+              ))}
+            </div>
+          </section>
+        ))}
+
+        {posts.length === 0 && (
+          <div class="empty">
+            <p>no posts yet. drop a markdown file in <code>src/content/blog/</code>.</p>
+          </div>
+        )}
       </section>
-    ))}
-
-    {posts.length === 0 && (
-      <div class="empty">
-        <p>no posts yet — drop a markdown file in <code>src/content/blog/</code>.</p>
-      </div>
-    )}
-  </section>
+    </Window>
+  </div>
 </BaseLayout>
 
 <style>
-  .blog-index { padding: 2rem 1.25rem 3rem; }
-
   .page-header {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px dashed var(--border);
   }
@@ -74,23 +77,24 @@ const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
     margin: 0.4rem 0 0;
   }
 
-  .year { margin-bottom: 2.4rem; }
+  .year { margin-bottom: 2rem; }
+  .year:last-child { margin-bottom: 0; }
   .year-title {
     color: var(--ctp-peach);
     font-size: 1rem;
-    margin: 0 0 0.9rem;
+    margin: 0 0 0.5rem;
     font-weight: 500;
   }
 
   .list {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.1rem;
   }
 
   .empty {
     border: 1px dashed var(--border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     padding: 2rem;
     text-align: center;
     color: var(--text-muted);
