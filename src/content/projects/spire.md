@@ -5,7 +5,7 @@ pubDate: 2026-09-28
 tags: ["kubernetes", "talos", "cilium", "homelab"]
 repo: "https://github.com/mmrmagno/spire"
 status: "wip"
-featured: false
+featured: true
 draft: false
 ---
 

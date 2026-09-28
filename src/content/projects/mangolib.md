@@ -6,7 +6,7 @@ tags: ["go", "ytdlp", "music"]
 repo: "https://github.com/mmrmagno/mangolib"
 url: "https://aur.archlinux.org/packages/mangolib-bin"
 status: "active"
-featured: true 
+featured: false
 draft: false
 ---
 
