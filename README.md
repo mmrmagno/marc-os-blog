@@ -55,35 +55,17 @@ Your content here.
 
 ## Production deploy
 
-```bash
-# on the VPS, once
-git clone https://github.com/mmrmagno/marc-os-blog.git /opt/marc-os-blog
-cd /opt/marc-os-blog
-cp .env.example .env
-$EDITOR .env                # set PROXY_NETWORK
-docker compose up -d
-```
+The site runs on [Spire](https://github.com/mmrmagno/spire), my homelab Kubernetes cluster,
+behind a Cloudflare Tunnel.
 
-CI builds and pushes `ghcr.io/mmrmagno/marc-os-blog:latest` on every push
-to `main`, then sends an HMAC-signed POST to a
-[webhook](https://github.com/adnanh/webhook) listener on the server. The
-listener checks the `X-Hub-Signature-256` header and runs
-`scripts/deploy.sh`, which pulls the new image, restarts the container and
-waits for `/healthz`. No SSH access from CI is needed.
+CI builds `ghcr.io/mmrmagno/marc-os-blog:latest` on every push to `main`, for amd64 and arm64.
+Renovate in the spire repo notices the new digest, opens a PR and merges it, and Flux rolls it
+out. Nothing in CI can reach the cluster, and nothing has to.
 
-To enable it:
+To roll back, revert the digest bump in the spire repo.
 
-1. Add the entry from `infra/webhook-hook.json.example` to the listener's
-   `hooks.json`, with a random secret.
-2. Set the repository secrets `DEPLOY_WEBHOOK_URL` and
-   `DEPLOY_WEBHOOK_SECRET` (same value as in `hooks.json`).
-
-The deploy script only pulls images. Changes to `docker-compose.yml` or
-`scripts/` need a manual `git pull` on the server. To redeploy by hand:
-
-```bash
-./scripts/deploy.sh
-```
+`docker-compose.yml` is still here for running the production image locally with the same
+hardening flags as the cluster: read-only root, no capabilities, tmpfs for nginx.
 
 ## Repository layout
 
@@ -100,7 +82,6 @@ src/
 └── lib/
 
 infra/
-docs/NPM-SETUP.md
 .github/workflows/
 ```
 
